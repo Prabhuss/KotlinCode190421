@@ -58,6 +58,7 @@ import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CheckOutActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
@@ -323,33 +324,24 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
     fun getCustomerAddress() {
 
         lifecycleScope.launch {
+
             try {
+                //Fetch Address List from API
                 val response = viewModel.getCustomerAddress(
                     preference.getIntData(Constants.saveMerchantIdKey),
                     preference.getStringData(Constants.saveMobileNumkey),
                     preference.getStringData(Constants.saveaccesskey))
                 launch {
                     try {
+                        //Add Address to local DB
                         response.data?.let { database.CustomerAddressDao().insertcustomerAddrData(it) }
-                        if (response.data?.size == 0) {
-                            binding.line.visibility = View.GONE
-                        } else {
-                            binding.line.visibility = View.VISIBLE
-                        }
-                        if (response.data?.size == 3) {
-                            binding.addNewAddr.visibility = View.GONE
-                        }
-                        val list = database.CustomerAddressDao().getCustAddrData(
-                            preference.getStringData(Constants.saveMobileNumkey),
-                            preference.getIntData(Constants.saveMerchantIdKey))
-                        //Baypass local database
-                        adapter = list.let { CustomerAddressAdapter(this@CheckOutActivity, it) }
-                        //comment above line and uncomment below line to use local database for customer address
-                        //adapter = CustomerAddressAdapter(this@CheckOutActivity, list)
-                        binding.recyclerview.adapter = adapter
-                        adapter?.notifyDataSetChanged()
+
+                        //load Adapter from local DB address
+                        loadAddressesFromLocalDB()
                     } catch (E: Exception) {
                         E.printStackTrace()
+                        //Load Adapter from API data
+                        loadAddressFromResponse(response.data)
                     }
                 }
             }catch (e: NoInternetExcetion) {
@@ -357,10 +349,76 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
             }catch (e:CancellationException)
             {
                 Log.i("scope","job is canceled")
+                //Crash Analytics
+                val map1=HashMap<String,String>()
+                map1.put("Error Message",e.message.toString())
+                map1.put("Stack Trace",e.printStackTrace().toString().take(150))
+                Analytics.trackEvent("Address Loading Error",map1)
             }
-            catch (e: Exception) {
-                okDialogWithOneAct("Error CA01", e.message.toString())
+            catch (ex: Exception) {
+                //Crash Analytics
+                val map1=HashMap<String,String>()
+                map1.put("Error From","While calling getCustomerAddress API")
+                map1.put("Error Message",ex.message.toString())
+                map1.put("Stack Trace",ex.printStackTrace().toString().take(150))
+                Analytics.trackEvent("Address Loading Error",map1)
+                okDialogWithOneAct("Error CA01", ex.message.toString())
             }
+        }
+    }
+
+    suspend fun loadAddressesFromLocalDB(){
+        val list = database.CustomerAddressDao().getCustAddrData(
+            preference.getStringData(Constants.saveMobileNumkey),
+            preference.getIntData(Constants.saveMerchantIdKey))
+        //Adjust Interface as per Address Data
+        if (list.size == 0) {
+            binding.line.visibility = View.GONE
+        } else {
+            binding.line.visibility = View.VISIBLE
+        }
+        if (list.size == 3) {
+            binding.addNewAddr.visibility = View.GONE
+        }
+        adapter = list.let { CustomerAddressAdapter(this@CheckOutActivity, it) }
+        binding.recyclerview.adapter = adapter
+        adapter?.notifyDataSetChanged()
+    }
+
+    fun loadAddressFromResponse(data :ArrayList<CustomerAddressData>?){
+        try {
+            val list = data
+            list?.let {
+                //Adjust Interface as per Address Data
+                if (it.size == 0) {
+                    binding.line.visibility = View.GONE
+                } else {
+                    binding.line.visibility = View.VISIBLE
+                }
+                if (it.size == 3) {
+                    binding.addNewAddr.visibility = View.GONE
+                }
+            }
+            adapter = list?.toList()?.let {
+                CustomerAddressAdapter(this@CheckOutActivity,
+                    it
+                )
+            }
+            binding.recyclerview.adapter = adapter
+            adapter?.notifyDataSetChanged()
+        }
+        catch (ex : java.lang.Exception){
+            ex.printStackTrace()
+            //Crash Analytics
+            val map1=HashMap<String,String>()
+            map1.put("Error Message",ex.message.toString())
+            map1.put("Stack Trace",ex.printStackTrace().toString().take(150))
+            Analytics.trackEvent("Address Loading Error",map1)
+            Toast.makeText(
+                this@CheckOutActivity,
+                "Error while loading address",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -943,8 +1001,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
             processPaymentMode()
             dialog.dismiss()
         }
-        if(this!=null)
-            dialog.show()
+        dialog.show()
     }
 
         private  fun displayLoadingBox(msg : String): AlertDialog {

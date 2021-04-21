@@ -158,6 +158,11 @@ class CartItmesAdapter(val preference: PreferenceProvider,val fm:FragmentManager
         count = 0
         UbboFreshApp.instance?.productsDataModel?.itemCount = count
         UbboFreshApp.instance?.carItemsList?.removeAt(position)
+        var map = HashMap<String,String>()
+        UbboFreshApp.instance?.productsDataModel?.citrineProdId?.let { map.put("Product ID", it) }
+        UbboFreshApp.instance?.productsDataModel?.productName?.let { map.put("Product Name", it) }
+        UbboFreshApp.instance?.productsDataModel?.mrp?.let { map.put("MRP", it) }
+        Analytics.trackEvent("Product Removed",map)
         UbboFreshApp.instance?.hashMap?.remove(UbboFreshApp.instance?.productsDataModel?.citrineProdId)
         if(UbboFreshApp.instance?.carItemsList!!.size>0)
         {
