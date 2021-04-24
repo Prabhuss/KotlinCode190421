@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment
 import com.getpy.dikshasshop.R
 import com.getpy.dikshasshop.UbboFreshApp
+import com.getpy.dikshasshop.Utils.toast
 import com.getpy.dikshasshop.databinding.InstructionFragmentDemoSheetBinding
 
 class InstructionBottomSheetFragment() : SuperBottomSheetFragment() {
@@ -25,6 +26,7 @@ class InstructionBottomSheetFragment() : SuperBottomSheetFragment() {
         })
         binding.addBut.setOnClickListener {
             UbboFreshApp.instance?.instructionString=binding.addInstEdit.text.toString()
+            activity?.toast("Delivery Instructions Added")
             dismiss()
         }
 

@@ -35,10 +35,19 @@ class CartViewModel(val repository: UserRepository) : ViewModel()
    }
 
 
-   suspend fun getCustomerAddress(merchantbranchid:Int, phone_number:String, access_key:String): CustomerAddressResponse
-   {
-       return repository.getCustomerAddress(merchantbranchid, phone_number, access_key)
-   }
+    suspend fun getCustomerAddress(merchantbranchid:Int, phone_number:String, access_key:String): CustomerAddressResponse
+    {
+        return repository.getCustomerAddress(merchantbranchid, phone_number, access_key)
+    }
+    suspend fun getCouponCode(merchantbranchid: Int, phone_number: String, access_key: String): CouponResponse
+    {
+        return repository.getCouponCode(merchantbranchid, phone_number, access_key)
+    }
+    suspend fun checkCouponCode(merchantbranchid:Int, phone_number:String, access_key:String,couponCode: String?, totalPayableAmount: String): CheckCouponResponse
+    {
+        return repository.checkCouponCode(merchantbranchid, phone_number, access_key, couponCode, totalPayableAmount)
+    }
+
 
     suspend fun cfTokenGenerator(merchantbranchid:Int, phone_number:String, access_key:String,orderAmount: String, orderId: String,orderCurrency: String):CfTokenResponse
     {

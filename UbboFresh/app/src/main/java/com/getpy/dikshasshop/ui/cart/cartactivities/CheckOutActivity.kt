@@ -26,15 +26,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.cashfree.pg.CFPaymentService
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.analytics.Analytics
-import com.microsoft.appcenter.crashes.Crashes
 import com.getpy.dikshasshop.R
 import com.getpy.dikshasshop.UbboFreshApp
 import com.getpy.dikshasshop.Utils.*
@@ -49,6 +40,15 @@ import com.getpy.dikshasshop.databinding.OkCustomDialogBinding
 import com.getpy.dikshasshop.ui.cart.CartViewModel
 import com.getpy.dikshasshop.ui.cart.CartViewModelFactory
 import com.getpy.dikshasshop.ui.orderstatus.OrderStatusActivity
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import kotlinx.android.synthetic.main.activity_check_out.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -58,7 +58,6 @@ import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CheckOutActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
@@ -70,6 +69,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
     var adapter:CustomerAddressAdapter?=null
     var customerAddressData:CustomerAddressData?=null
     var deliveryCharges : String? = "0.00"
+    var couponDiscountAmount : Double = 0.0
     var currentAddressId : String? = ""
     var cashfreeOrderId : String? = null
     var CurrentOrderInvoiceId : String = ""
@@ -108,17 +108,21 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
             startActivity(intent)
         })
         //coupon code button
-        /*
         binding.couponButton.setOnClickListener {
+            //Redirect
             val intent = Intent(this, CouponPageActivity::class.java)
+            intent.putExtra("TotalAmount", totalMRP)
             startActivity(intent)
         }
-        /*
+        //remove Coupon Function
+        binding.couponRemoveButton.setOnClickListener{
+            UbboFreshApp.instance?.couponDiscontAmount= null
+            UbboFreshApp.instance?.couponApplied= null
+            onResume()
+        }
 
-         */
-         */
         binding.icBack.setOnClickListener(View.OnClickListener {
-            finish()
+            onBackPressed()
         })
         binding.placeOrder.setOnClickListener(View.OnClickListener {
             binding.placeOrder.isEnabled=false
@@ -164,7 +168,6 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
         lifecycleScope.launch {
             try {
                 currentAddressId = selectedAddressId
-                totalPayablePrice = intent.getStringExtra("totalPayablePrice") ?: "0.0"
                 binding.totalPayablePrice.setText(totalPayablePrice)
                 binding.delChargesValue.text = "0.00"
                 deliveryCharges="0.00"
@@ -256,7 +259,38 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
 
     override fun onResume() {
         super.onResume()
+        binding.pbar.show()
         getCustomerAddress()
+        binding.delChargesValue.text = "0.00"
+        //checkCouponStatus called
+        checkCouponStatus()
+    }
+    override fun onBackPressed() {
+        UbboFreshApp.instance?.couponDiscontAmount = null
+        UbboFreshApp.instance?.couponApplied = ""
+        super.onBackPressed()
+    }
+    private fun checkCouponStatus() {
+        if( UbboFreshApp.instance?.couponDiscontAmount != null && UbboFreshApp.instance?.couponDiscontAmount != 0.0){
+            couponDiscountAmount = UbboFreshApp.instance?.couponDiscontAmount!!
+            binding.couponButton.text = "Change Coupon"
+            binding.selectedCouponLayout.visibility = View.VISIBLE
+            val selectedCoupon ="Coupon Applied: " + UbboFreshApp.instance?.couponApplied
+            binding.selectedCouponText.text = selectedCoupon
+            totalPayablePrice = intent.getStringExtra("totalPayablePrice") ?: "0.0"
+            val calculatedTotalPayablePrice = (totalPayablePrice.toDouble() - couponDiscountAmount)
+            binding.couponDiscountValue.text = couponDiscountAmount.toString()
+            totalPayablePrice = String.format("%.2f",calculatedTotalPayablePrice)
+            binding.totalPayablePrice.text = String.format("%.2f",calculatedTotalPayablePrice)
+        }
+        else{
+            totalPayablePrice = intent.getStringExtra("totalPayablePrice") ?: "0.0"
+            binding.totalPayablePrice.text = totalPayablePrice
+            binding.couponDiscountValue.text = "Not Applied"
+            binding.couponButton.text = "Apply Coupon"
+            binding.selectedCouponLayout.visibility = View.GONE
+            val selectedCoupon ="Coupon Applied: "
+        }
     }
 
     var mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -364,6 +398,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
                 Analytics.trackEvent("Address Loading Error",map1)
                 okDialogWithOneAct("Error CA01", ex.message.toString())
             }
+            binding.pbar.dismiss()
         }
     }
 
@@ -425,12 +460,12 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
     fun getDistance(lat: String?, long: String?) {
         lifecycleScope.launch {
             try {
-                val getDisanceResponse = viewModel.getDeliveryCharges(
+                val getDistanceResponse = viewModel.getDeliveryCharges(
                     preference.getIntData(Constants.saveMerchantIdKey),
                     preference.getStringData(Constants.saveaccesskey),
                     preference.getStringData(Constants.saveMobileNumkey),
                         currentAddressId.toString())
-                getDisanceData=getDisanceResponse.data
+                getDisanceData=getDistanceResponse.data
                 //Code for "Distance check" pop up
                 if(getDisanceData?.active?.toLowerCase().equals("yes"))
                 {
@@ -503,11 +538,11 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
         jsonObject.addProperty("access_key",preference.getStringData(Constants.saveaccesskey))
         jsonObject.addProperty("phone_number",preference.getStringData(Constants.saveMobileNumkey))
         jsonObject.addProperty("merchant_id",preference.getIntData(Constants.saveMerchantIdKey))
-        Invoice.addProperty("DiscountAmount",discount)
+        Invoice.addProperty("DiscountAmount",couponDiscountAmount)
         Invoice.addProperty("TaxAmount",totalTax)
         Invoice.addProperty("TotalInvoiceAmount",totalMRP)
         Invoice.addProperty("DeliveryCharge", deliveryCharges)
-        Invoice.addProperty("CouponCode","")
+        Invoice.addProperty("CouponCode",UbboFreshApp.instance?.couponApplied)
         Invoice.addProperty("PayableAmount",totalPayablePrice)
         Invoice.addProperty("InvoiceType","GetPYApp")
         Invoice.addProperty("OrderStatus",orderStatus)
@@ -590,6 +625,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
                     val response=viewModel.createOrder(jsonObject)
                     //binding.pbar.dismiss()
                     UbboFreshApp.instance?.instructionString=""
+                    UbboFreshApp.instance?.couponDiscontAmount = null
                     if(response.status.equals("Success")) {
                         map.put("Status", response.status.toString())
                         map.put("Order Message", response.data?.message.toString())

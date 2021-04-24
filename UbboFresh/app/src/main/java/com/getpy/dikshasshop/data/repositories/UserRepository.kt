@@ -138,6 +138,14 @@ class UserRepository(val api:MyApi, val db:AppDataBase):SafeApiRequest(){
     {
         return apiRequest { api.getCustomerAddress(merchantbranchid, phone_number, access_key) }
     }
+    suspend fun getCouponCode(merchantbranchid:Int, phone_number:String, access_key:String): CouponResponse
+    {
+        return apiRequest { api.getCouponCode(merchantbranchid, phone_number, access_key) }
+    }
+    suspend fun checkCouponCode(merchantbranchid:Int, phone_number:String, access_key:String,couponCode: String?, totalPayableAmount: String): CheckCouponResponse
+    {
+        return apiRequest { api.checkCouponCode(merchantbranchid, phone_number, access_key, couponCode.toString(), totalPayableAmount) }
+    }
 
     suspend fun cfTokenGenerator(merchantbranchid:Int, phone_number:String, access_key:String,orderAmount: String, orderId: String,orderCurrency: String):CfTokenResponse
     {

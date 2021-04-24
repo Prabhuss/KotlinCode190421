@@ -141,28 +141,6 @@
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/price_details_laout"
-                        android:padding="@dimen/_5sdp">
-
-                        <TextView
-                            android:id="@+id/coupon_discount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/coupon_discount"
-                            android:textSize="@dimen/_14sdp" />
-
-                        <TextView
-                            android:id="@+id/coupon_discount_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:text="Apply Coupon"
-                            android:textColor="@color/blue_color"
-                            android:textSize="@dimen/_13sdp" />
-                    </RelativeLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/tot_layout"

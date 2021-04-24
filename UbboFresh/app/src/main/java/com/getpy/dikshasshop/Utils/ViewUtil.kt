@@ -35,7 +35,7 @@ var PATTERN: Pattern = Pattern.compile(REG)
 fun CharSequence.isPhoneNumber() : Boolean = PATTERN.matcher(this).find()
 fun Context.toast(message:String)
 {
-    Toast.makeText(this,message,Toast.LENGTH_LONG).show()
+    Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
 }
 fun Context.log(message: String)
 {

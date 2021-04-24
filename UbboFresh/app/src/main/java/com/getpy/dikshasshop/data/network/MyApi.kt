@@ -236,10 +236,28 @@ interface MyApi {
     @FormUrlEncoded
     @POST("v2/auth/getCustomerAddress ")
     suspend fun getCustomerAddress(
-        @Field("merchant_id")merchantbranchid:Int,
-        @Field("phone_number")phone_number:String,
-        @Field("access_key")access_key:String
+            @Field("merchant_id")merchantbranchid:Int,
+            @Field("phone_number")phone_number:String,
+            @Field("access_key")access_key:String
     ):Response<CustomerAddressResponse>
+
+    @FormUrlEncoded
+    @POST("v2/auth/getCouponList ")
+    suspend fun getCouponCode(
+            @Field("merchant_id")merchantbranchid:Int,
+            @Field("phone_number")phone_number:String,
+            @Field("access_key")access_key:String
+    ):Response<CouponResponse>
+
+    @FormUrlEncoded
+    @POST("v2/auth/checkCouponValidity ")
+    suspend fun checkCouponCode(
+            @Field("merchant_id")merchantbranchid:Int,
+            @Field("phone_number")phone_number:String,
+            @Field("access_key")access_key:String,
+            @Field("coupon_code")coupon_code:String,
+            @Field("payable_amount")payable_amount:String
+    ):Response<CheckCouponResponse>
 
 
     @FormUrlEncoded

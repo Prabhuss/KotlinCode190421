@@ -53,6 +53,7 @@ class CartFragment : InjectionFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_cart, container, false)
         binding.recyclerview.setHasFixedSize(true)
+        UbboFreshApp.instance?.instructionString = ""
         MainActivity.binding.activityMainAppbarlayout.showView()
         MainActivity.binding.selectStore.hideView()
         MainActivity.binding.activityMainToolbarTitle.setTypeface(UbboFreshApp.instance?.latoregular)
@@ -69,7 +70,7 @@ class CartFragment : InjectionFragment() {
                 startActivity(intent)
             }else
             {
-                activity?.okDialogWithOneAct(Constants.appName,"Hello sir, your cart is empty")
+                activity?.okDialogWithOneAct(Constants.appName,"Your cart is empty.")
             }
         })
         runnable= Runnable {
@@ -184,8 +185,6 @@ class CartFragment : InjectionFragment() {
         //binding.gstValue.setTypeface(UbboFreshApp.instance?.latoheavy)
         binding.discount.setTypeface(UbboFreshApp.instance?.latoheavy)
         binding.discountValue.setTypeface(UbboFreshApp.instance?.latoheavy)
-        binding.couponDiscount.setTypeface(UbboFreshApp.instance?.latoheavy)
-        binding.couponDiscountValue.setTypeface(UbboFreshApp.instance?.latoheavy)
         binding.total.setTypeface(UbboFreshApp.instance?.latoheavy)
         binding.totalPrice.setTypeface(UbboFreshApp.instance?.latoheavy)
         binding.procedBut.setTypeface(UbboFreshApp.instance?.latoheavy)
