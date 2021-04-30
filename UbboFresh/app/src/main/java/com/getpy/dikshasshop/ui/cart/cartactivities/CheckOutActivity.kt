@@ -8,11 +8,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Typeface.BOLD
+import android.graphics.Typeface.BOLD_ITALIC
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -167,6 +174,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
     private fun getDeliveryCharges(selectedAddressId: String?) {
         lifecycleScope.launch {
             try {
+                checkCouponStatus()
                 currentAddressId = selectedAddressId
                 binding.totalPayablePrice.setText(totalPayablePrice)
                 binding.delChargesValue.text = "0.00"
@@ -242,6 +250,24 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
         country = intent.getStringExtra("country") ?: ""
         postalCode = intent.getStringExtra("postalCode") ?: ""
         address = intent.getStringExtra("address") ?: ""
+
+        //reference text style
+        val spannable = SpannableString("Were you referred? Please click on 'Apply Coupon' to enter your reference code.")
+        spannable.setSpan(
+            ForegroundColorSpan(Color.parseColor("#FFB02B18")),
+            0, 18,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(
+            StyleSpan(BOLD_ITALIC),
+            0, 18,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(
+            ForegroundColorSpan(Color.parseColor("#FF5E5E5E")),
+            19, spannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+
+        binding.refText.text = spannable
 
         binding.totMrpValue.setText(totalMRP)
         binding.gstValue.setText(totalTax)
@@ -1055,3 +1081,4 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 999
     }
 }
+

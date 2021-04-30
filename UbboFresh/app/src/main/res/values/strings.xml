@@ -21,6 +21,7 @@
     <string name="my_orders">My Orders</string>
     <string name="switch_store">Switch Store</string>
     <string name="contact_merchant">Contact Merchant</string>
+    <string name="refer">Refer and Earn</string>
     <string name="logout">Log Out</string>
     <string name="terms">Terms &amp; Conditions</string>
     <string name="copy_text"></string>
@@ -59,7 +60,7 @@
     <string name="enable_now">Enable Now</string>
     <string name="start_date">Offer start date: </string>
     <string name="expire_date">Offer valid till:</string>
-    <string name="max_discount">Maximum available discount:</string>
+    <string name="max_discount">Maximum discount:</string>
     <string name="notification_channel_id">default</string>
     <string name="msg_token_fmt">msg_token_fmt</string>
     <string name="location_permission_not_granted">Unable to access location. Permission not granted.</string>
@@ -70,4 +71,5 @@
     <string name="delivery_warning">No refunds or cancellations will be processed based on failure to comply with requests for special instructions.</string>
     <string name="suc_str">Congratulations!! your order placed successfully. Thank you."</string>
     <string name="fail_str">Sorry!! your order is failed.Please try again later.Check "My Orders" tab for order status."</string>
+    <string name="ref_msg">Invite your friends to download our app to earn exciting benefits.</string>
 </resources>

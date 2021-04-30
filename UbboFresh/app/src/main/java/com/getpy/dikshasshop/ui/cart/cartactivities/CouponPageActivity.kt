@@ -40,6 +40,9 @@ class CouponPageActivity : AppCompatActivity(), KodeinAware {
         viewModel = ViewModelProviders.of(this, factory).get(CartViewModel::class.java)
         binding.progressBar.show()
         //setContentView(R.layout.activity_coupon_page)
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
         binding.checkButton.setOnClickListener {
             if(binding.mannualCouponCode.text.isNullOrEmpty()){
                 okDialogWithOneAct("Message","Please enter the coupon code")

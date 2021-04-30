@@ -172,8 +172,32 @@
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
                 <RelativeLayout
-                    android:id="@+id/logout_layout"
+                    android:id="@+id/refer_friend"
                     android:layout_below="@+id/contact_merchant"
+                    android:paddingLeft="@dimen/_20sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/ref_friend_image"
+                        android:src="@drawable/ic_refer"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"/>
+                    <TextView
+                        android:id="@+id/ref_friend_text"
+                        android:textSize="@dimen/_13sdp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_toRightOf="@+id/ref_friend_image"
+                        android:text="@string/refer"
+                        android:textColor="@color/family_red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/logout_layout"
+                    android:layout_below="@+id/refer_friend"
                     android:paddingLeft="@dimen/_20sdp"
                     android:paddingRight="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"

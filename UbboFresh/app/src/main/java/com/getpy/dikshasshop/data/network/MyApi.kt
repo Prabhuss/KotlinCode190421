@@ -49,6 +49,14 @@ interface MyApi {
     ) : Response<GetCustInfoResponse>
 
     @FormUrlEncoded
+    @POST("v2/auth/getReferLinkContent")
+    suspend fun getReferLinkContent (
+                            @Field("access_key")access_key:String,
+                            @Field("phone_number")phone_number:String,
+                             @Field("merchant_id")merchant_id:Int
+    ) : Response<GetReferenceResponse>
+
+    @FormUrlEncoded
     @POST("v2/auth/SubCategory")
     suspend fun subCategory (
             @Field("merchant_id")merchant_id:Int,

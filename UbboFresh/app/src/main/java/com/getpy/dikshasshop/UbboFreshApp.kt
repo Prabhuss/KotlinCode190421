@@ -21,6 +21,7 @@ import com.getpy.dikshasshop.ui.multistore.MultiStoreViewModelFactory
 import com.getpy.dikshasshop.ui.myorders.MyOrdersModelFactory
 import com.getpy.dikshasshop.ui.notifications.NotificationViewModelFactory
 import com.getpy.dikshasshop.ui.ordersummary.OrderSumModelFactory
+import com.getpy.dikshasshop.ui.referandearn.ReferPageViewModelFactory
 import com.getpy.dikshasshop.ui.search.SearchViewModelFactory
 import com.getpy.dikshasshop.ui.shopping.OffersViewModelFactory
 import org.kodein.di.Kodein
@@ -96,6 +97,7 @@ class UbboFreshApp : Application(),KodeinAware{
         bind() from singleton { OffersViewModelFactory(instance()) }
         bind() from singleton { OrderSumModelFactory(instance()) }
         bind() from singleton { NotificationViewModelFactory(instance()) }
+        bind() from singleton { ReferPageViewModelFactory(instance()) }
 
 
     }

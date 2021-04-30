@@ -70,6 +70,12 @@ class UserRepository(val api:MyApi, val db:AppDataBase):SafeApiRequest(){
     {
         return apiRequest { api.getCustInfo(phone_number, access_key, merchant_id) }
     }
+    suspend fun getReferenceData (access_key:String,
+                                  phone_number:String,
+                             merchant_id:Int) : GetReferenceResponse
+    {
+        return apiRequest { api.getReferLinkContent(access_key , phone_number, merchant_id) }
+    }
 
     suspend fun setcustInfo(phone_number:String?, secondphone_number:String?, merchant_id:Int?,
         first_name:String?, last_name:String?, device:String?, latitude:String?, longitude:String?,

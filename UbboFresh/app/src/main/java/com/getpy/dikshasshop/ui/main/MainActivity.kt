@@ -1,6 +1,7 @@
 package com.getpy.dikshasshop.ui.main
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +37,7 @@ import com.getpy.dikshasshop.ui.account.WebviewActivity
 import com.getpy.dikshasshop.ui.contactmerchant.ContactMerchantActivity
 import com.getpy.dikshasshop.ui.myorders.MyOrdersActivity
 import com.getpy.dikshasshop.ui.notifications.NotificationActivity
+import com.getpy.dikshasshop.ui.referandearn.ReferPageActivity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -175,6 +177,9 @@ class MainActivity : AppCompatActivity(),KodeinAware
             if (id == R.id.account) {
                 binding.bottomNavigationView.selectedItemId=R.id.accountFragment
             }
+            if (id == R.id.refer_and_earn) {
+                checkInternetAndLoadPage(this)
+            }
             if (id == R.id.terms) {
                 loadTCUrl()
             }
@@ -229,7 +234,7 @@ class MainActivity : AppCompatActivity(),KodeinAware
                     preference.getStringData(Constants.saveaccesskey))
             }catch (e: NoInternetExcetion)
             {
-                MainActivity.binding.coordinateLayout.snakBar("Please check network")
+                MainActivity.binding.coordinateLayout.snakBar("No internet. Please check your data connection")
                 //activity?.networkDialog()
             }catch (e:CancellationException)
             {
@@ -238,6 +243,24 @@ class MainActivity : AppCompatActivity(),KodeinAware
             catch (e:Exception)
             {
                 okDialogWithOneAct("Error",e.message.toString())
+            }
+        }
+    }
+
+
+    private fun checkInternetAndLoadPage(thisContext: Context) {
+        lifecycleScope.launch {
+            try {
+                val temp = viewmodel.merchantAppSettingDetails(
+                        preference.getIntData(Constants.saveMerchantIdKey),
+                        "TnCMessage",
+                        preference.getStringData(Constants.saveMobileNumkey),
+                        preference.getStringData(Constants.saveaccesskey))
+                val intent= Intent(thisContext, ReferPageActivity::class.java)
+                startActivity(intent)
+
+            }catch (e: NoInternetExcetion) {
+                binding.coordinateLayout.snakBar("No internet. Please check your data connection")
             }
         }
     }

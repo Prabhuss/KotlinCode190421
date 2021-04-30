@@ -79,7 +79,7 @@ class ProductItemsFragment() : InjectionFragment() ,SwipeRefreshLayout.OnRefresh
         }
         adapter?.mPostItems=ArrayList()
         adapter?.hashMap?.let { adapter?.mPostItems?.addAll(it) }
-        binding.recyclerview.setAdapter(adapter)
+        binding.recyclerview.adapter = adapter
         adapter?.notifyDataSetChanged()
         binding.swipeRefresh.isRefreshing = false
         if(adapter?.itemCount!! >0)
@@ -192,7 +192,7 @@ class ProductItemsFragment() : InjectionFragment() ,SwipeRefreshLayout.OnRefresh
             }
         }
     }
-    suspend fun callProducts(categoryname:String): ProductsResponse
+    private suspend fun callProducts(categoryname:String): ProductsResponse
     {
         return viewmodel.getProducts(
                 preference.getIntData(Constants.saveMerchantIdKey),

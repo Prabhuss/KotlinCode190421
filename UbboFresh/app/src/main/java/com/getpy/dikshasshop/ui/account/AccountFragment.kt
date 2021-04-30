@@ -23,6 +23,7 @@ import com.getpy.dikshasshop.ui.editprofie.EditProfileActivity
 import com.getpy.dikshasshop.ui.home.InjectionFragment
 import com.getpy.dikshasshop.ui.main.MainActivity
 import com.getpy.dikshasshop.ui.myorders.MyOrdersActivity
+import com.getpy.dikshasshop.ui.referandearn.ReferPageActivity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -43,23 +44,24 @@ class AccountFragment : InjectionFragment(),View.OnClickListener{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-       binding = DataBindingUtil.inflate(LayoutInflater.from(activity),R.layout.fragment_account, container, false)
-       viewmodel= activity?.let { ViewModelProviders.of(it,factory).get(AccountVewModel::class.java) }!!
-       val view=binding.root
+        binding = DataBindingUtil.inflate(LayoutInflater.from(activity),R.layout.fragment_account, container, false)
+        viewmodel= activity?.let { ViewModelProviders.of(it,factory).get(AccountVewModel::class.java) }!!
+        val view=binding.root
         MainActivity.binding.activityMainAppbarlayout.showView()
-       MainActivity.binding.selectStore.hideView()
-       MainActivity.binding.activityMainToolbarTitle.setTypeface(UbboFreshApp.instance?.latoregular)
-       MainActivity.binding.activityMainToolbarTitle.setText("Accounts")
+        MainActivity.binding.selectStore.hideView()
+        MainActivity.binding.activityMainToolbarTitle.setTypeface(UbboFreshApp.instance?.latoregular)
+        MainActivity.binding.activityMainToolbarTitle.setText("Accounts")
 
-       binding.editLayout.setOnClickListener(this)
-       binding.orderLayout.setOnClickListener(this)
-       binding.switchStoreLayout.setOnClickListener(this)
-       binding.contactMerchant.setOnClickListener(this)
-       binding.logoutLayout.setOnClickListener(this)
-       binding.termsPolicy.setOnClickListener(this)
-       binding.privacyPolicy.setOnClickListener(this)
-       binding.shippingPolicy.setOnClickListener(this)
-       binding.returnPolicy.setOnClickListener(this)
+        binding.editLayout.setOnClickListener(this)
+        binding.orderLayout.setOnClickListener(this)
+        binding.referFriend.setOnClickListener(this)
+        binding.switchStoreLayout.setOnClickListener(this)
+        binding.contactMerchant.setOnClickListener(this)
+        binding.logoutLayout.setOnClickListener(this)
+        binding.termsPolicy.setOnClickListener(this)
+        binding.privacyPolicy.setOnClickListener(this)
+        binding.shippingPolicy.setOnClickListener(this)
+        binding.returnPolicy.setOnClickListener(this)
 
         runnable = Runnable {
             if(MainActivity.navcontroller?.currentDestination?.id==R.id.accountFragment) {
@@ -67,9 +69,9 @@ class AccountFragment : InjectionFragment(),View.OnClickListener{
             }
         }
 
-       init()
-       getTermsAndCndUrl()
-       return view
+        init()
+        getTermsAndCndUrl()
+        return view
     }
 
     override fun onResume() {
@@ -243,6 +245,26 @@ class AccountFragment : InjectionFragment(),View.OnClickListener{
         }else if(view==binding.returnPolicy)
         {
             loadTCUrl()
+        }else if(view==binding.referFriend)
+        {
+            checkInternetAndloadReferPage()
+        }
+    }
+
+    private fun checkInternetAndloadReferPage() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val temp = viewmodel.merchantAppSettingDetails(
+                        preference.getIntData(Constants.saveMerchantIdKey),
+                        "TnCMessage",
+                        preference.getStringData(Constants.saveMobileNumkey),
+                        preference.getStringData(Constants.saveaccesskey))
+                val intent= Intent(activity,ReferPageActivity::class.java)
+                startActivity(intent)
+            }catch (e: NoInternetExcetion)
+            {
+                MainActivity.binding.coordinateLayout.snakBar("No internet. Please check your data connection")
+            }
         }
     }
 }

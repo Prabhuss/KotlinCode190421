@@ -23,6 +23,9 @@
         <item android:id="@+id/account"
             android:icon="@drawable/ic_account"
             android:title="Account" />
+        <item android:id="@+id/refer_and_earn"
+            android:icon="@drawable/ic_refer"
+            android:title="Refer and Earn" />
     </group>
 
     <group android:id="@+id/group_menu">

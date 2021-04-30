@@ -20,20 +20,48 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-              <TextView
-                android:id="@+id/coupon_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="COUPONCODE"
-                android:textColor="@color/quantum_grey800"
-                android:textSize="@dimen/_18sdp" />
+                    <TextView
+                        android:id="@+id/coupon_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/alike"
+                        android:text="COUPONCODE"
+                        android:textColor="@color/quantum_grey800"
+                        android:textSize="@dimen/_18sdp" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_alignParentEnd="true"
+                        android:elevation="@dimen/_10sdp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/apply_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:textAlignment="center"
+                            android:paddingTop="@dimen/_2sdp"
+                            android:paddingBottom="@dimen/_2sdp"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:paddingRight="@dimen/_5sdp"
+                            android:text="APPLY"
+                            android:textColor="@color/family_red"
+                            android:textSize="@dimen/_14sdp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
             <TextView
                 android:id="@+id/coupon_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
+                android:fontFamily="sans-serif-condensed"
                 android:text="coupon code details"
                 android:textColor="@color/quantum_grey600"
                 android:textSize="@dimen/_13sdp" /><LinearLayout
@@ -58,40 +86,47 @@
                 />
         </LinearLayout>
             <RelativeLayout
+                android:id="@+id/more_details"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/more_details"
+                    android:id="@+id/more_details_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="More Details"
-                    android:textColor="@color/blue_color"
+                    android:textColor="@color/family_red"
                     android:textSize="@dimen/_13sdp" />
                 <ImageView
                     android:id="@+id/dropdown_arrow"
-                    android:layout_toRightOf="@id/more_details"
+                    android:layout_toRightOf="@id/more_details_txt"
                     android:src="@drawable/ic_arrow_down"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/more_details_layout"
-                android:orientation="vertical"
                 android:visibility="gone"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/quantum_grey400"/>
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:id="@+id/tnc_Details"
                     android:textColor="@color/quantum_grey800"
                     android:textSize="@dimen/_12sdp"
                     android:text="Coupon code terms n conditions and other details"
-                    android:fontFamily="sans-serif-condensed"/>
-                <RelativeLayout
+                    android:fontFamily="sans-serif"/>
+                <LinearLayout
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
@@ -99,18 +134,19 @@
                         android:id="@+id/max_discount"
                         android:text="@string/max_discount"
                         android:textColor="@color/quantum_grey900"
-                        android:layout_width="wrap_content"
+                        android:layout_weight=".40"
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/max_discount_value"
                         android:text="NA"
-                        android:layout_toRightOf="@+id/max_discount"
                         android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight=".60"
                         android:textColor="@color/quantum_brown300"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"/>
-                </RelativeLayout>
-                <RelativeLayout
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
@@ -118,7 +154,8 @@
                         android:id="@+id/start_date"
                         android:text="@string/start_date"
                         android:textColor="@color/quantum_grey900"
-                        android:layout_width="wrap_content"
+                        android:layout_weight=".40"
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/start_date_value"
@@ -126,10 +163,11 @@
                         android:layout_toRightOf="@+id/start_date"
                         android:layout_marginLeft="@dimen/_8sdp"
                         android:textColor="@color/quantum_brown300"
-                        android:layout_width="wrap_content"
+                        android:layout_weight=".60"
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"/>
-                </RelativeLayout>
-                <RelativeLayout
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
@@ -137,7 +175,8 @@
                         android:id="@+id/end_date"
                         android:text="@string/expire_date"
                         android:textColor="@color/quantum_grey900"
-                        android:layout_width="wrap_content"
+                        android:layout_weight=".40"
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/end_date_value"
@@ -145,9 +184,10 @@
                         android:layout_toRightOf="@+id/end_date"
                         android:layout_marginLeft="@dimen/_8sdp"
                         android:textColor="@color/quantum_brown300"
-                        android:layout_width="wrap_content"
+                        android:layout_weight=".60"
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"/>
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

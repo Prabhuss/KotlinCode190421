@@ -250,9 +250,9 @@ fun Context.okLogOutDialog(activity: Activity,preference:PreferenceProvider,titl
         startActivity(intent)
         activity.finish()
     }
-    binding.cancelText.setOnClickListener(View.OnClickListener {
+    binding.cancelText.setOnClickListener {
         dialog.dismiss()
-    })
+    }
     if(this!=null)
         dialog.show()
 }

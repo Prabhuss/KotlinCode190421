@@ -8,22 +8,24 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.getpy.dikshasshop.R
 import com.getpy.dikshasshop.UbboFreshApp
-import com.getpy.dikshasshop.Utils.toast
 import com.getpy.dikshasshop.data.model.CouponDataModel
 import com.getpy.dikshasshop.databinding.CouponListRowBinding
 import com.getpy.dikshasshop.listeners.ItemClickListener
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CouponListAdapter( val context: Context, var mCategoriesList:MutableList<CouponDataModel>,val itemClickListener: ItemClickListener) : RecyclerView.Adapter<CouponListAdapter.DeveloperViewHolder>() {
     inner class DeveloperViewHolder(var mDeveloperListItemBinding: CouponListRowBinding) :
             RecyclerView.ViewHolder(mDeveloperListItemBinding.root){
         init{
             mDeveloperListItemBinding.couponCode.typeface = UbboFreshApp.instance?.latoregular
-            mDeveloperListItemBinding.moreDetails.typeface = UbboFreshApp.instance?.latoregular
+            mDeveloperListItemBinding.moreDetailsTxt.typeface = UbboFreshApp.instance?.latoregular
             mDeveloperListItemBinding.couponInfo.typeface = UbboFreshApp.instance?.latoregular
             mDeveloperListItemBinding.minValue.typeface = UbboFreshApp.instance?.latoregular
             mDeveloperListItemBinding.moreDetails.setOnClickListener(View.OnClickListener {
-                context.toast("No Details Available")
-                //toggleDetails(mDeveloperListItemBinding)
+                //context.toast("No Details Available")
+                toggleDetails(mDeveloperListItemBinding)
             })
         }
     }
@@ -56,13 +58,29 @@ class CouponListAdapter( val context: Context, var mCategoriesList:MutableList<C
         holder.mDeveloperListItemBinding.minValue.text = "Rs. "+model.MinAmount
         holder.mDeveloperListItemBinding.couponInfo.text = model.CouponInfo
         holder.mDeveloperListItemBinding.tncDetails.text = model.TnCDetais
-        holder.mDeveloperListItemBinding.startDateValue.text = model.StartsFrom
-        holder.mDeveloperListItemBinding.endDateValue.text = model.ExpiresOn
-        holder.mDeveloperListItemBinding.maxDiscountValue.text = model.MaxDiscount
-        holder.mDeveloperListItemBinding.root.setOnClickListener (View.OnClickListener {
+        holder.mDeveloperListItemBinding.maxDiscountValue.text = "Rs. "+ model.MaxDiscount
+
+        //format date and parse
+        val startDate = formatDate(model.StartsFrom.toString())
+        val endDate = formatDate(model.ExpiresOn.toString())
+        holder.mDeveloperListItemBinding.startDateValue.text = startDate?:model.ExpiresOn
+        holder.mDeveloperListItemBinding.endDateValue.text = endDate?:model.ExpiresOn
+        holder.mDeveloperListItemBinding.applyButton.setOnClickListener (View.OnClickListener {
             itemClickListener.onItemClick(holder.mDeveloperListItemBinding.root,position)
         })
 
+    }
+    fun formatDate(d:String):String?
+    {
+        var date: Date?
+        try {
+            val form = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+            date = form.parse(d)
+            val postFormatter = SimpleDateFormat("MMM dd, yyyy hh:mm")
+            return postFormatter.format(date)
+        } catch (e: ParseException) {
+            return null
+        }
     }
 
 }

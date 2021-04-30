@@ -169,7 +169,7 @@ class HorizontalProductItemsAdapter(val preferences: PreferenceProvider,val mana
             count=addText.toInt()
         }
         count=(count+1)
-        mholder.mBinding.countTxt.setText(count.toString())
+        mholder.mBinding.countTxt.text = count.toString()
         if(UbboFreshApp.instance?.hashMap!!.containsKey(model.citrineProdId))
         {
             model.itemCount=count
