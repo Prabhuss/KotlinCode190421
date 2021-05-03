@@ -153,7 +153,7 @@ class AddAddressActivity : AppCompatActivity(),KodeinAware,OnMapReadyCallback {
         binding.applyChanges.setTypeface(UbboFreshApp.instance?.latoheavy)
 
         val intent=intent
-
+        val addressmodel = intent.getSerializableExtra("model")
         latitudeForAddress=intent.getStringExtra("lat")?:"0.0"
         longitudeForAddress=intent.getStringExtra("lng")?:"0.0"
         city=intent.getStringExtra("city")?:""

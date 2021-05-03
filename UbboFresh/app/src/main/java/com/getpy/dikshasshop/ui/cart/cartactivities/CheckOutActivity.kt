@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Typeface.BOLD
 import android.graphics.Typeface.BOLD_ITALIC
 import android.location.Address
 import android.location.Geocoder
@@ -81,7 +80,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
     var cashfreeOrderId : String? = null
     var CurrentOrderInvoiceId : String = ""
     var merchantAppSetData:Merchantdata?=null
-    var getDisanceData:GetDistanceData?=null
+    private var getDistanceData:GetDistanceData?=null
     var latitude: String? = null
     var longitude: String? = null
     var city: String = ""
@@ -491,21 +490,21 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
                     preference.getStringData(Constants.saveaccesskey),
                     preference.getStringData(Constants.saveMobileNumkey),
                         currentAddressId.toString())
-                getDisanceData=getDistanceResponse.data
+                getDistanceData=getDistanceResponse.data
                 //Code for "Distance check" pop up
-                if(getDisanceData?.active?.toLowerCase().equals("yes"))
+                if(getDistanceData?.active?.toLowerCase().equals("yes"))
                 {
-                    if(getDisanceData?.deliverable?.toLowerCase().equals("yes"))
+                    if(getDistanceData?.deliverable?.toLowerCase().equals("yes"))
                     {
-                        getDisanceData?.message?.let { it1 -> okDialog(Constants.AlertBoxHeader, it1)}
+                        getDistanceData?.message?.let { it1 -> okDialog(Constants.AlertBoxHeader, it1)}
                         return@launch
                     }
                 }
-                if(getDisanceData?.active?.toLowerCase().equals("yes"))
+                if(getDistanceData?.active?.toLowerCase().equals("yes"))
                 {
-                    if(getDisanceData?.deliverable?.toLowerCase().equals("no"))
+                    if(getDistanceData?.deliverable?.toLowerCase().equals("no"))
                     {
-                        getDisanceData?.message?.let { it1 -> okDialogWithOneAct(Constants.AlertBoxHeader, it1)}
+                        getDistanceData?.message?.let { it1 -> okDialogWithOneAct(Constants.AlertBoxHeader, it1)}
                         if(!binding.placeOrder.isEnabled)
                             binding.placeOrder.setEnabled(true)
                         return@launch
@@ -546,7 +545,6 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun createOrderWithOnlinePayment(createOrderLoadingBox: AlertDialog) {
-
         //Update Order in Database before processing payment
         placeOrder("Online","Payment Pending",createOrderLoadingBox)
         //if true call redirectToCashfreeGateway
@@ -634,12 +632,12 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
         map1.put("Products", productNameListForAnalytics)
         map1.put("TaxAmount", totalTax)
         Analytics.trackEvent("New Order Request", map1)
-
+        val tempp = jsonObject.toString()
 
         //binding.pbar.show()
 
         //Send analytics
-        val map=HashMap<String,String>()
+           val map=HashMap<String,String>()
         map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
         map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
         map.put("PaymentMode", paymentMode)

@@ -226,7 +226,7 @@ interface MyApi {
         @Field("access_key")access_key:String?,
         @Field("merchant_id")merchant_id:Int?,
         @Field("phone_number")phone_number:String?,
-        @Field("secondphone_number")secondphone_number:String?,
+        @Field("secondPhone_number")secondphone_number:String?,
         @Field("address1")address1:String?,
         @Field("address2")address2:String?,
         @Field("longitude")longitude:String?,
