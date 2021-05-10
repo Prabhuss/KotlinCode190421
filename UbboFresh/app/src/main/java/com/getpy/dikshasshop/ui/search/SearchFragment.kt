@@ -30,6 +30,7 @@ import com.getpy.dikshasshop.listeners.PaginationListener
 import com.getpy.dikshasshop.listeners.PaginationListener.PAGE_START
 import com.getpy.dikshasshop.ui.home.InjectionFragment
 import com.getpy.dikshasshop.ui.main.MainActivity
+import com.getpy.fresh.views.Products.ProductsFragment
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import org.kodein.di.generic.instance
@@ -176,6 +177,38 @@ class SearchFragment : InjectionFragment(), OnRefreshListener {
             UbboFreshApp.instance?.isSearchBoxclicked=false
             activity?.onBackPressed()
         })
+
+
+        ProductsFragment.runnable = Runnable {
+            lifecycleScope.launch {
+                try {
+                    UbboFreshApp.instance?.carItemsList?.let { database.CustomerAddressDao().insertProductsData(it) }
+                }catch (e:CancellationException)
+                {
+                    Log.i("scope","job is canceled")
+                }
+                catch (e:Exception)
+                {
+                    e.printStackTrace()
+                }
+
+            }
+        }
+        ProductsFragment.removerunnable = Runnable {
+            lifecycleScope.launch {
+                try {
+                    UbboFreshApp.instance?.productsDataModel?.let { database.CustomerAddressDao().deleteProductsData(it) }
+                }catch (e:CancellationException)
+                {
+                    Log.i("scope","job is canceled")
+                }
+                catch (e:Exception)
+                {
+                    e.printStackTrace()
+                }
+
+            }
+        }
         return binding.root
     }
 
@@ -186,15 +219,19 @@ class SearchFragment : InjectionFragment(), OnRefreshListener {
     {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val response = viewmodel.getSearchProducts(
+                val prodResponse = viewmodel.getSearchProducts(
                     preference.getStringData(Constants.saveMobileNumkey),
                     preference.getStringData(Constants.saveaccesskey),
                     preference.getIntData(Constants.saveMerchantIdKey),
                     searchName,
                     10,
                    currentPage)
+                for(i in 0 until prodResponse?.data!!.size)
+                {
+                    prodResponse.data?.get(i)?.mobileNumber=preference.getStringData(Constants.saveMobileNumkey)
+                }
                 binding.pbar.dismiss()
-                val data = response.data
+                val data = prodResponse.data
 
                 // do this all stuff on Success of APIs response
                 /**
@@ -256,6 +293,10 @@ class SearchFragment : InjectionFragment(), OnRefreshListener {
          * @return A new instance of fragment SearchFragment.
          */
         // TODO: Rename and change types and number of parameters
+
+        var runnable:Runnable?=null
+        var removerunnable:Runnable?=null
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             SearchFragment().apply {

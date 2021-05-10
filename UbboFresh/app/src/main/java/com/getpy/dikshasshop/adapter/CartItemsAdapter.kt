@@ -23,7 +23,7 @@ import com.getpy.dikshasshop.databinding.CartItemRowBinding
 import com.getpy.dikshasshop.ui.cart.CartFragment
 import com.getpy.dikshasshop.ui.main.MainActivity
 
-class CartItmesAdapter(val preference: PreferenceProvider,val fm:FragmentManager,val context: Context, var mCategoriesList:MutableList<ProductsDataModel>) : RecyclerView.Adapter<CartItmesAdapter.DeveloperViewHolder>() {
+class CartItemsAdapter(val preference: PreferenceProvider, val fm:FragmentManager, val context: Context, var mCategoriesList:MutableList<ProductsDataModel>) : RecyclerView.Adapter<CartItemsAdapter.DeveloperViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DeveloperViewHolder {
         val mDeveloperListItemBinding = DataBindingUtil.inflate<CartItemRowBinding>(
@@ -158,6 +158,7 @@ class CartItmesAdapter(val preference: PreferenceProvider,val fm:FragmentManager
         count = 0
         UbboFreshApp.instance?.productsDataModel?.itemCount = count
         UbboFreshApp.instance?.carItemsList?.removeAt(position)
+        mCategoriesList.removeAt(position)
         var map = HashMap<String,String>()
         UbboFreshApp.instance?.productsDataModel?.citrineProdId?.let { map.put("Product ID", it) }
         UbboFreshApp.instance?.productsDataModel?.productName?.let { map.put("Product Name", it) }

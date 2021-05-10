@@ -288,6 +288,11 @@ interface MyApi {
         @Query("access_key")access_key:String
     ):Response<PaymentModeResponse>
 
+
+    @POST("v2/prod/getProductsbyId")
+    suspend fun getCartItemFromServer(@Body json: JsonObject
+    ):Response<ProductsResponse>
+
     @FormUrlEncoded
     @POST("v2/auth/getDistance")
     suspend fun getDistance(

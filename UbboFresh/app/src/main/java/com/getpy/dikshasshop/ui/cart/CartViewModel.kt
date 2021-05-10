@@ -58,6 +58,10 @@ class CartViewModel(val repository: UserRepository) : ViewModel()
     {
         return repository.getPaymentModeDetails(merchantbranchid, phone_number, access_key)
     }
+    suspend fun getCartItemFromServer(json: JsonObject): ProductsResponse
+    {
+        return repository.getCartItemFromServer(json)
+    }
    suspend fun getDistance(merchantbranchid:Int,
                            latitude:String?,
                            longitude:String?,

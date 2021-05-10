@@ -162,6 +162,11 @@ class UserRepository(val api:MyApi, val db:AppDataBase):SafeApiRequest(){
     {
         return apiRequest { api.getPaymentModeDetails(merchantbranchid, phone_number, access_key) }
     }
+    suspend fun getCartItemFromServer(json : JsonObject
+    ): ProductsResponse
+    {
+        return apiRequest { api.getCartItemFromServer(json ) }
+    }
     suspend fun getDistance(merchantbranchid:Int, latitude:String?,
                             longitude:String?, access_key:String, phone_number:String):GetDisanceResponse
     {

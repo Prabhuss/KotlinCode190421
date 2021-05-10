@@ -21,6 +21,7 @@ import com.getpy.dikshasshop.data.preferences.PreferenceProvider
 import com.getpy.dikshasshop.databinding.ItemLoadingBinding
 import com.getpy.dikshasshop.databinding.ProductsItemsRowBinding
 import com.getpy.dikshasshop.ui.main.MainActivity
+import com.getpy.dikshasshop.ui.search.SearchFragment
 import java.lang.IllegalArgumentException
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -241,12 +242,10 @@ class PostRecyclerAdapter(val preference: PreferenceProvider, val fm: FragmentMa
             mBinding.remove.visibility=View.VISIBLE
             var addText=mBinding.countTxt.text.toString()
             var count:Int
-            if(addText.equals("Add"))
-            {
-                count=0
-            }else
-            {
-                count=addText.toInt()
+            count = if(addText.equals("Add")) {
+                0
+            }else {
+                addText.toInt()
             }
             count=(count+1)
             mBinding.countTxt.setText(count.toString())
@@ -275,13 +274,13 @@ class PostRecyclerAdapter(val preference: PreferenceProvider, val fm: FragmentMa
             map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
             model?.citrineProdId.let { map.put("productid", it.toString()) }
             model?.productName.let { map.put("productname",it.toString()) }
-            map.put("itemcount", model?.itemCount.toString())
+            map["itemcount"] = model?.itemCount.toString()
             Analytics.trackEvent("Add Product clicked", map)
 
             MainActivity.setupBadge()
-            ProductsFragment.runnable?.let { Handler().postDelayed(it,10) }
+            ProductsFragment.runnable?.let { Handler().postDelayed(it,100) }
         }
-        fun removeItems(mBinding:ProductsItemsRowBinding, position: Int)
+        private fun removeItems(mBinding:ProductsItemsRowBinding, position: Int)
         {
             var count=mBinding.countTxt.text.toString().toInt()
             var pos:Int=0
@@ -312,7 +311,12 @@ class PostRecyclerAdapter(val preference: PreferenceProvider, val fm: FragmentMa
                     UbboFreshApp.instance?.hashMap?.put(UbboFreshApp.instance?.productsDataModel?.citrineProdId!!, UbboFreshApp.instance?.productsDataModel!!)
                     mBinding.countTxt.text = count.toString()
                     //inserting data into db
-                    ProductsFragment.runnable?.let { Handler().postDelayed(it,10) }
+                    if(ProductsFragment.runnable == null){
+                        SearchFragment.runnable?.let { Handler().postDelayed(it,10) }
+                    }
+                    else{
+                        ProductsFragment.runnable?.let { Handler().postDelayed(it,10) }
+                    }
                 }
 
                 val map= HashMap<String, String>()

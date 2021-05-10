@@ -26,7 +26,7 @@ import org.kodein.di.generic.instance
 class SplashActivity : AppCompatActivity(),KodeinAware {
     override val kodein by kodein()
     private lateinit var splashViewModel:SplashViewModel
-    private val databse:AppDataBase by instance()
+    private val database:AppDataBase by instance()
     private val preference: PreferenceProvider by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +43,9 @@ class SplashActivity : AppCompatActivity(),KodeinAware {
         splashViewModel.assainCustomFonts(this)
         lifecycleScope.launch {
             try {
-                UbboFreshApp.instance?.carItemsList=databse.CustomerAddressDao().getCartData(
+                UbboFreshApp.instance?.carItemsList=database.CustomerAddressDao().getCartData(
                     preference.getIntData(Constants.saveMerchantIdKey).toString(),preference.getStringData(Constants.saveMobileNumkey))
-                if(UbboFreshApp.instance?.carItemsList!!.size>0)
+                 if(UbboFreshApp.instance?.carItemsList!!.size>0)
                 {
                     UbboFreshApp.instance?.hashMap?.clear()
                     for(i in 0 until UbboFreshApp.instance?.carItemsList!!.size) {

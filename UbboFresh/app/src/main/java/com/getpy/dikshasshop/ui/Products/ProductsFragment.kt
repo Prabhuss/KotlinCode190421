@@ -104,6 +104,9 @@ class ProductsFragment : InjectionFragment() {
             lifecycleScope.launch {
                 try {
                     UbboFreshApp.instance?.carItemsList?.let { database.CustomerAddressDao().insertProductsData(it) }
+//                    val temp = database.CustomerAddressDao().getCartData(
+//                            preference.getIntData(Constants.saveMerchantIdKey).toString(),preference.getStringData(Constants.saveMobileNumkey))
+//                    val u = 9
                 }catch (e:CancellationException)
                 {
                     Log.i("scope","job is canceled")

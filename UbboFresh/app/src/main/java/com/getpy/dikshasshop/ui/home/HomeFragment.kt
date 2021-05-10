@@ -140,6 +140,10 @@ class HomeFragment() : InjectionFragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     try {
                         UbboFreshApp.instance?.carItemsList?.let { appDataBase.CustomerAddressDao().insertProductsData(it) }
+                        val emp = appDataBase.CustomerAddressDao().getCartData(
+                                preference.getIntData(Constants.saveMerchantIdKey).toString(),
+                                preference.getStringData(Constants.saveMobileNumkey))
+                        val empp = 2
                     } catch (e: CancellationException) {
                         Log.i("scope", "job is canceled")
                     } catch (e: Exception) {

@@ -192,12 +192,12 @@ class HorizontalProductItemsAdapter(val preferences: PreferenceProvider,val mana
         MainActivity.setupBadge()
         HomeFragment.addRunnable?.let { Handler().postDelayed(it,10) }
     }
-    fun removeItems(mholder: DeveloperViewHolder, position: Int)
+    private fun removeItems(mholder: DeveloperViewHolder, position: Int)
     {
         var count=mholder.mBinding.countTxt.text.toString().toInt()
         var pos:Int=0
         if(count!=0) {
-            val model=mCategoriesList.get(position)
+            val model= mCategoriesList[position]
             for(i in 0 until UbboFreshApp.instance?.carItemsList!!.size)
             {
                 val mm=UbboFreshApp.instance?.carItemsList?.get(i)
