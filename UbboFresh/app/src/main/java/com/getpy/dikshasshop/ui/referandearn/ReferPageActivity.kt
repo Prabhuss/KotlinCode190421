@@ -4,6 +4,7 @@ import android.content.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -33,6 +34,7 @@ class ReferPageActivity : AppCompatActivity(), KodeinAware {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_refer_page)
         viewModel = ViewModelProviders.of(this, factory).get(ReferPageViewModel::class.java)
         binding.progBar.show()
+
         binding.backBtn.setOnClickListener {
             onBackPressed()
         }
@@ -67,25 +69,21 @@ class ReferPageActivity : AppCompatActivity(), KodeinAware {
         getReferPageContentFromAPI()
     }
     fun getReferPageContentFromAPI(){
-        lifecycleScope.launch {
-            try {
-                val response = viewModel.getReferenceData(
-                        preference.getStringData(Constants.saveaccesskey),
-                        preference.getStringData(Constants.saveMobileNumkey),
-                        preference.getIntData(Constants.saveMerchantIdKey))
-                response?.let {
-                    binding.displayMsg.text = it.data?.ReferDisplayMsg
-                    appLink = it.data?.ShareLinkTxt.toString()
-                    Handler().postDelayed({binding.progBar.dismiss()},100)
-                }
-            }
-            catch(e: Exception){
-                toast(e.message.toString())
-                Handler().postDelayed({binding.progBar.dismiss()},100)
-                finish()
-            }
+
+        val pageTitle =intent.extras?.getString("PageTitle")
+        val couponConfigured =intent.extras?.getString("CouponConfigured")
+        val shareLinkTxt =intent.extras?.getString("ShareLinkTxt")
+        val referDisplayMsg =intent.extras?.getString("ReferDisplayMsg")
+        binding.displayMsg.text = referDisplayMsg
+        appLink = shareLinkTxt.toString()
+        if(couponConfigured.toString().toLowerCase() == "share"){
+            binding.refProcessLayout.visibility = View.GONE
         }
-        
+        if(pageTitle!= null){
+            binding.refPageTitle.text = pageTitle.toString()
+        }
+        Handler().postDelayed({binding.progBar.dismiss()},100)
+
     }
 
     override fun onBackPressed(){

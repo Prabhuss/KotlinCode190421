@@ -1,6 +1,7 @@
 package com.getpy.dikshasshop.ui.main
 
 import androidx.lifecycle.ViewModel
+import com.getpy.dikshasshop.data.model.GetReferenceResponse
 import com.getpy.dikshasshop.data.model.MainAndSubCatResponse
 import com.getpy.dikshasshop.data.model.MerAppSettingsDetailsResponse
 import com.getpy.dikshasshop.data.repositories.UserRepository
@@ -28,4 +29,7 @@ class MainViewModel (val repository: UserRepository):ViewModel()
     {
         return repository.merchantAppSettingDetails(mid,setting_name,pnum,ackey)
     }
+
+    suspend fun getReferenceData(access_key:String, phone_number: String, merchant_id:Int): GetReferenceResponse =
+            repository.getReferenceData(access_key,phone_number,merchant_id)
 }

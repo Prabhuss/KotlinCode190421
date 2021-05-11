@@ -3,6 +3,7 @@ package com.getpy.dikshasshop.ui.account
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -247,24 +248,36 @@ class AccountFragment : InjectionFragment(),View.OnClickListener{
             loadTCUrl()
         }else if(view==binding.referFriend)
         {
-            checkInternetAndloadReferPage()
+            getReferPageContentAndLoadPage()
         }
     }
 
-    private fun checkInternetAndloadReferPage() {
-        viewLifecycleOwner.lifecycleScope.launch {
+
+    fun getReferPageContentAndLoadPage(){
+        lifecycleScope.launch {
             try {
-                val temp = viewmodel.merchantAppSettingDetails(
-                        preference.getIntData(Constants.saveMerchantIdKey),
-                        "TnCMessage",
+                val response = viewmodel.getReferenceData(
+                        preference.getStringData(Constants.saveaccesskey),
                         preference.getStringData(Constants.saveMobileNumkey),
-                        preference.getStringData(Constants.saveaccesskey))
-                val intent= Intent(activity,ReferPageActivity::class.java)
-                startActivity(intent)
-            }catch (e: NoInternetExcetion)
-            {
+                        preference.getIntData(Constants.saveMerchantIdKey))
+                response?.let {
+                    if(response.data?.CouponConfigured.toString().toLowerCase() == "yes"){
+                        val intent= Intent(context,ReferPageActivity::class.java)
+                        intent.putExtra("PageTitle", response.data?.PageTitle)
+                        intent.putExtra("CouponConfigured", response.data?.CouponConfigured)
+                        intent.putExtra("ShareLinkTxt", response.data?.ShareLinkTxt)
+                        intent.putExtra("ReferDisplayMsg", response.data?.ReferDisplayMsg)
+                        startActivity(intent)
+                    }
+                    else{
+                        context?.toast("Coming Soon")
+                    }
+                }
+            }
+            catch(e: Exception){
                 MainActivity.binding.coordinateLayout.snakBar("No internet. Please check your data connection")
             }
         }
+
     }
 }

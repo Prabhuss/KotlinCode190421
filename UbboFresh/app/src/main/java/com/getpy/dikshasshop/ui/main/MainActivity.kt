@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity(),KodeinAware
                 binding.bottomNavigationView.selectedItemId=R.id.accountFragment
             }
             if (id == R.id.refer_and_earn) {
-                checkInternetAndLoadPage(this)
+                getReferPageContentAndLoadPage(this)
             }
             if (id == R.id.terms) {
                 loadTCUrl()
@@ -248,22 +248,36 @@ class MainActivity : AppCompatActivity(),KodeinAware
     }
 
 
-    private fun checkInternetAndLoadPage(thisContext: Context) {
+
+    fun getReferPageContentAndLoadPage(thisContext: Context){
         lifecycleScope.launch {
             try {
-                val temp = viewmodel.merchantAppSettingDetails(
-                        preference.getIntData(Constants.saveMerchantIdKey),
-                        "TnCMessage",
+                val response = viewmodel.getReferenceData(
+                        preference.getStringData(Constants.saveaccesskey),
                         preference.getStringData(Constants.saveMobileNumkey),
-                        preference.getStringData(Constants.saveaccesskey))
-                val intent= Intent(thisContext, ReferPageActivity::class.java)
-                startActivity(intent)
-
-            }catch (e: NoInternetExcetion) {
-                binding.coordinateLayout.snakBar("No internet. Please check your data connection")
+                        preference.getIntData(Constants.saveMerchantIdKey))
+                response?.let {
+                    if(response.data?.CouponConfigured.toString().toLowerCase() == "yes"){
+                        val intent= Intent(thisContext,ReferPageActivity::class.java)
+                        intent.putExtra("PageTitle", response.data?.PageTitle)
+                        intent.putExtra("CouponConfigured", response.data?.CouponConfigured)
+                        intent.putExtra("ShareLinkTxt", response.data?.ShareLinkTxt)
+                        intent.putExtra("ReferDisplayMsg", response.data?.ReferDisplayMsg)
+                        startActivity(intent)
+                    }
+                    else{
+                        toast("Coming Soon")
+                    }
+                    //format reference variables and load ref page
+                }
+            }
+            catch(e: Exception){
+                MainActivity.binding.coordinateLayout.snakBar("No internet. Please check your data connection")
             }
         }
+
     }
+
     fun callMainCategories(merchantid:Int)
     {
         lifecycleScope.launch {

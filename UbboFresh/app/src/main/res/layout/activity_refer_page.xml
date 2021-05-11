@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/ord_summary"
+                android:id="@+id/ref_page_title"
                 android:layout_centerHorizontal="true"
                 android:text="Refer and Earn"
                 android:textSize="@dimen/_15sdp"
@@ -70,85 +70,92 @@
                     android:layout_height="wrap_content"/>
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
-        <RelativeLayout
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginLeft="@dimen/_25sdp"
-            android:layout_marginRight="@dimen/_25sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <androidx.cardview.widget.CardView
-                android:elevation="@dimen/_12sdp"
-                android:layout_margin="@dimen/_3sdp"
-                android:layout_alignParentLeft="true"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
-                app:cardCornerRadius="@dimen/_50sdp">
-                <ImageView
-                    android:padding="@dimen/_10sdp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_ref_img1"/>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_margin="@dimen/_3sdp"
-                android:elevation="@dimen/_12sdp"
-                android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
-                app:cardCornerRadius="@dimen/_50sdp">
-                <ImageView
-                    android:padding="@dimen/_10sdp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ref_img2"/>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_margin="@dimen/_3sdp"
-                android:elevation="@dimen/_12sdp"
-                android:layout_alignParentRight="true"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
-                app:cardCornerRadius="@dimen/_50sdp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10sdp"
-                    android:src="@drawable/ref_img3" />
-            </androidx.cardview.widget.CardView>
-            <TextView
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
+            <LinearLayout
+                android:id="@+id/ref_process_layout"
                 android:layout_width="match_parent"
-                android:layout_centerVertical="true"
-                android:background="@color/family_red"
-                android:layout_height="2sp"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:padding="@dimen/_3sdp"
-            android:layout_marginLeft="@dimen/_15sdp"
-            android:layout_marginRight="@dimen/_15sdp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_alignParentStart="true"
-                android:textAlignment="center"
-                android:text="Share the referral code with your friends"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:text="Remind them to use your referral code on their first purchase"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_alignParentEnd="true"
-                android:textAlignment="center"
-                android:text="You can avail benefits once their order is processed"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginLeft="@dimen/_25sdp"
+                    android:layout_marginRight="@dimen/_25sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <androidx.cardview.widget.CardView
+                        android:elevation="@dimen/_12sdp"
+                        android:layout_margin="@dimen/_3sdp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_50sdp"
+                        app:cardCornerRadius="@dimen/_50sdp">
+                        <ImageView
+                            android:padding="@dimen/_10sdp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_ref_img1"/>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:layout_margin="@dimen/_3sdp"
+                        android:elevation="@dimen/_12sdp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_50sdp"
+                        app:cardCornerRadius="@dimen/_50sdp">
+                        <ImageView
+                            android:padding="@dimen/_10sdp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ref_img2"/>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:layout_margin="@dimen/_3sdp"
+                        android:elevation="@dimen/_12sdp"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_50sdp"
+                        app:cardCornerRadius="@dimen/_50sdp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_10sdp"
+                            android:src="@drawable/ref_img3" />
+                    </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_width="match_parent"
+                        android:layout_centerVertical="true"
+                        android:background="@color/family_red"
+                        android:layout_height="2sp"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:padding="@dimen/_3sdp"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_alignParentStart="true"
+                        android:textAlignment="center"
+                        android:text="Share the referral code with your friends"
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center"
+                        android:text="Remind them to use your referral code on their first purchase"
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_alignParentEnd="true"
+                        android:textAlignment="center"
+                        android:text="You can avail benefits once their order is processed"
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+            </LinearLayout>
+
         <RelativeLayout
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_3sdp"

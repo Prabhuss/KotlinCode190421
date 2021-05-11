@@ -28,6 +28,8 @@ class AccountVewModel(val repository: UserRepository) :ViewModel()
         return getOrders(access_key,phone_number, merchant_id,start_date,page_size,page_number,end_date)
     }
 
+    suspend fun getReferenceData(access_key:String, phone_number: String, merchant_id:Int): GetReferenceResponse =
+            repository.getReferenceData(access_key,phone_number,merchant_id)
     suspend fun merchantAppSettingDetails(mid:Int,setting_name:String,pnum:String,ackey:String):MerAppSettingsDetailsResponse
     {
         return repository.merchantAppSettingDetails(mid,setting_name,pnum,ackey)
