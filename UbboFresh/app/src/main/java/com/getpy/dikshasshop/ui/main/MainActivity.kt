@@ -263,15 +263,32 @@ class MainActivity : AppCompatActivity(),KodeinAware
                         intent.putExtra("CouponConfigured", response.data?.CouponConfigured)
                         intent.putExtra("ShareLinkTxt", response.data?.ShareLinkTxt)
                         intent.putExtra("ReferDisplayMsg", response.data?.ReferDisplayMsg)
+                        val map= HashMap<String, String>()
+                        map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                        map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                        map.put("Status", "Page loaded")
+                        Analytics.trackEvent("Refer Page Clicked", map)
                         startActivity(intent)
                     }
                     else{
                         toast("Coming Soon")
+                        val map= HashMap<String, String>()
+                        map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                        map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                        map.put("Status", "Page is not loaded")
+                        Analytics.trackEvent("Refer Page Clicked", map)
+                    
                     }
                     //format reference variables and load ref page
                 }
             }
             catch(e: Exception){
+                val map= HashMap<String, String>()
+                map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                map.put("Status", "Page is not loaded because of exception")
+                map.put("Error in loading", e.message.toString())
+                Analytics.trackEvent("Refer Page Clicked", map)
                 MainActivity.binding.coordinateLayout.snakBar("No internet. Please check your data connection")
             }
         }

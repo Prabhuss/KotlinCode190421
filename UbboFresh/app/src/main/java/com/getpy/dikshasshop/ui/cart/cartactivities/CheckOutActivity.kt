@@ -118,6 +118,11 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
             //Redirect
             val intent = Intent(this, CouponPageActivity::class.java)
             intent.putExtra("TotalAmount", totalMRP)
+            val map= HashMap<String, String>()
+            map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+            map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+            map.put("TotalAmount", totalMRP)
+            Analytics.trackEvent("Coupon Page Clicked", map)
             startActivity(intent)
         }
         //remove Coupon Function

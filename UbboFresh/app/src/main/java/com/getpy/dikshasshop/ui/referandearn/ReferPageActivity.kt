@@ -10,12 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.getpy.dikshasshop.R
+import com.getpy.dikshasshop.UbboFreshApp
 import com.getpy.dikshasshop.Utils.Constants
 import com.getpy.dikshasshop.Utils.dismiss
 import com.getpy.dikshasshop.Utils.show
 import com.getpy.dikshasshop.Utils.toast
 import com.getpy.dikshasshop.data.preferences.PreferenceProvider
 import com.getpy.dikshasshop.databinding.ActivityReferPageBinding
+import com.microsoft.appcenter.analytics.Analytics
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -43,6 +45,11 @@ class ReferPageActivity : AppCompatActivity(), KodeinAware {
             whatsappIntent.type = "text/plain"
             whatsappIntent.setPackage("com.whatsapp")
             whatsappIntent.putExtra(Intent.EXTRA_TEXT, appLink)
+            val map= HashMap<String, String>()
+            map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+            map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+            map.put("Refer Type", "Shared over WhatsApp")
+            Analytics.trackEvent("Refer Clicked", map)
             try {
                 startActivity(whatsappIntent)
             } catch (ex: ActivityNotFoundException) {
@@ -54,6 +61,11 @@ class ReferPageActivity : AppCompatActivity(), KodeinAware {
                 val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText(appLink, appLink)
                 clipboard.setPrimaryClip(clip)
+                val map= HashMap<String, String>()
+                map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                map.put("Refer Type", "Refer link copied")
+                Analytics.trackEvent("Refer Clicked", map)
                 toast("Link Copied")
             } else {
                 toast("Permission to copy denied.")
@@ -64,6 +76,11 @@ class ReferPageActivity : AppCompatActivity(), KodeinAware {
             intent.action = Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT, appLink)
             intent.type = "text/plain"
+            val map= HashMap<String, String>()
+            map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+            map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+            map.put("Refer Type", "Refer link Shared")
+            Analytics.trackEvent("Refer Clicked", map)
             startActivity(Intent.createChooser(intent, "Please select app: "))
         }
         getReferPageContentFromAPI()

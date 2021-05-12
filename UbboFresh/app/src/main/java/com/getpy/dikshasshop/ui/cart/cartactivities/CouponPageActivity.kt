@@ -19,6 +19,7 @@ import com.getpy.dikshasshop.databinding.OkCustomDialogBinding
 import com.getpy.dikshasshop.listeners.ItemClickListener
 import com.getpy.dikshasshop.ui.cart.CartViewModel
 import com.getpy.dikshasshop.ui.cart.CartViewModelFactory
+import com.microsoft.appcenter.analytics.Analytics
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -104,16 +105,42 @@ class CouponPageActivity : AppCompatActivity(), KodeinAware {
                         val couponDiscount = response.CalculatedDiscount?.toDouble()
                         UbboFreshApp.instance?.couponDiscontAmount= couponDiscount
                         UbboFreshApp.instance?.couponApplied= couponCode
+                        val map= HashMap<String, String>()
+                        map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                        map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                        map.put("Coupon Code", couponCode.toString())
+                        map.put("Total Payable Amount", totalPayableAmount)
+                        map.put("Coupon Status", "Coupon applied")
+                        map.put("Discount Amount", response.CalculatedDiscount.toString())
+                        map.put("Coupon Response Message", response.message.toString())
+                        Analytics.trackEvent("Coupon Selected", map)
                         okDialogBox("Coupon Applied","Yayyy!! You save Rs. ${response.CalculatedDiscount} on this purchase.")
                         //toast(couponDiscount.toString())
                     }
                     else{
+
+                        val map= HashMap<String, String>()
+                        map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                        map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                        map.put("Coupon Code", couponCode.toString())
+                        map.put("Total Payable Amount", totalPayableAmount)
+                        map.put("Coupon Status", "Coupon not applied")
+                        map.put("Coupon Response Message", response.message.toString())
+                        Analytics.trackEvent("Coupon Selected", map)
                         okDialogWithOneAct("Coupon not applied",response.message.toString())
                         UbboFreshApp.instance?.couponDiscontAmount= null
                         UbboFreshApp.instance?.couponApplied= null
                     }
                 }
                 else{
+                    val map= HashMap<String, String>()
+                    map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                    map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                    map.put("Coupon Code", couponCode.toString())
+                    map.put("Total Payable Amount", totalPayableAmount)
+                    map.put("Coupon Status", "Coupon not applied")
+                    map.put("Coupon Response Message", response.message.toString())
+                    Analytics.trackEvent("Coupon Selected", map)
                     okDialogWithOneAct("Invalid",response.message.toString())
                     UbboFreshApp.instance?.couponDiscontAmount= null
                     UbboFreshApp.instance?.couponApplied= null

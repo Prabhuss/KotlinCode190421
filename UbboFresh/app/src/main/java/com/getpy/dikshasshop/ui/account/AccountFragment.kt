@@ -267,14 +267,31 @@ class AccountFragment : InjectionFragment(),View.OnClickListener{
                         intent.putExtra("CouponConfigured", response.data?.CouponConfigured)
                         intent.putExtra("ShareLinkTxt", response.data?.ShareLinkTxt)
                         intent.putExtra("ReferDisplayMsg", response.data?.ReferDisplayMsg)
+                        val map= HashMap<String, String>()
+                        map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                        map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                        map.put("Status", "Page loaded")
+                        Analytics.trackEvent("Refer Page Clicked", map)
                         startActivity(intent)
                     }
                     else{
                         context?.toast("Coming Soon")
+                        val map= HashMap<String, String>()
+                        map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                        map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                        map.put("Status", "Page not loaded")
+                        Analytics.trackEvent("Refer Page Clicked", map)
                     }
                 }
             }
+
             catch(e: Exception){
+                val map= HashMap<String, String>()
+                map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
+                map.put("merchantid", preference.getIntData(Constants.saveMerchantIdKey).toString())
+                map.put("Status", "Page not loaded because of exception")
+                map.put("Error in loading", e.message.toString())
+                Analytics.trackEvent("Refer Page Clicked", map)
                 MainActivity.binding.coordinateLayout.snakBar("No internet. Please check your data connection")
             }
         }
