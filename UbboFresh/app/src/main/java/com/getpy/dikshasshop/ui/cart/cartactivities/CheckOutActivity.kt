@@ -371,10 +371,12 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
                     preference.getStringData(Constants.saveMobileNumkey),
                     preference.getStringData(Constants.saveaccesskey)
                 )
-                if(!response.apiId.toString().isNullOrEmpty()){
-                    appId = response.apiId.toString()
-                    SecretKey = response.SecretKey.toString()
-                    pay_online_checkbox.visibility= View.VISIBLE
+                if(response.OnlinePaymentFlag?.toLowerCase()=="yes"){
+                    if(!response.apiId.toString().isNullOrEmpty()){
+                        appId = response.apiId.toString()
+                        SecretKey = response.SecretKey.toString()
+                        pay_online_checkbox.visibility= View.VISIBLE
+                    }
                 }
 
             } catch (E: Exception) {
@@ -386,9 +388,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
 
     //function to get customer address
     fun getCustomerAddress() {
-
         lifecycleScope.launch {
-
             try {
                 //Fetch Address List from API
                 val response = viewModel.getCustomerAddress(
@@ -583,40 +583,43 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
         var productNameListForAnalytics = "("
         for(i in 0 until UbboFreshApp.instance?.carItemsList!!.size)
         {
+
             val InvoiceItemObj=JsonObject()
             val model=UbboFreshApp.instance?.carItemsList?.get(i)
-            InvoiceItemObj.addProperty("ProductId",model?.citrineProdId)
-            InvoiceItemObj.addProperty("quantity",model?.itemCount)
-            InvoiceItemObj.addProperty("ProductName",model?.productName)
-            productNameListForAnalytics +=  model?.productName.toString() + ","
-            if(model?.mrp!=null && model.sellingPrice!=null)
-            {
-                InvoiceItemObj.addProperty("UnitPrice",model.mrp)
-                InvoiceItemObj.addProperty("Discount",(model.mrp?.toDouble()?.minus(model.sellingPrice.toDouble()))?.div(model.mrp?.toDouble()!!))
-                InvoiceItemObj.addProperty("UnitPriceAfterDiscount",model.sellingPrice)
-                InvoiceItemObj.addProperty("TotalPrice",(model.itemCount.times(model.sellingPrice.toDouble())))
-            }
-            var url=""
-            if(model?.imageLinkFlag!=null) {
-                url = if (model.imageLinkFlag.equals("R")) {
-                    UbboFreshApp.instance?.imageLoadUrl+model.productPicUrl
-                } else {
-                    model.productPicUrl
-                }
-            }else
-            {
-                if(model?.productPicUrl!=null)
+            if(model?.availability_Status?.toLowerCase()=="yes" && model?.visibilityStatus?.toLowerCase()=="yes"){
+                InvoiceItemObj.addProperty("ProductId",model?.citrineProdId)
+                InvoiceItemObj.addProperty("quantity",model?.itemCount)
+                InvoiceItemObj.addProperty("ProductName",model?.productName)
+                productNameListForAnalytics +=  model?.productName.toString() + ","
+                if(model?.mrp!=null && model.sellingPrice!=null)
                 {
-                    url=UbboFreshApp.instance?.imageLoadUrl+model.productPicUrl
+                    InvoiceItemObj.addProperty("UnitPrice",model.mrp)
+                    InvoiceItemObj.addProperty("Discount",(model.mrp?.toDouble()?.minus(model.sellingPrice.toDouble()))?.div(model.mrp?.toDouble()!!))
+                    InvoiceItemObj.addProperty("UnitPriceAfterDiscount",model.sellingPrice)
+                    InvoiceItemObj.addProperty("TotalPrice",(model.itemCount.times(model.sellingPrice.toDouble())))
+                }
+                var url=""
+                if(model?.imageLinkFlag!=null) {
+                    url = if (model.imageLinkFlag.equals("R")) {
+                        UbboFreshApp.instance?.imageLoadUrl+model.productPicUrl
+                    } else {
+                        model.productPicUrl
+                    }
                 }else
                 {
-                    url= UbboFreshApp.instance?.imageLoadUrl.toString()
-                }
+                    if(model?.productPicUrl!=null)
+                    {
+                        url=UbboFreshApp.instance?.imageLoadUrl+model.productPicUrl
+                    }else
+                    {
+                        url= UbboFreshApp.instance?.imageLoadUrl.toString()
+                    }
 
+                }
+                InvoiceItemObj.addProperty("ProductImage",url)
+                InvoiceItemObj.addProperty("Category",model?.category)
+                InvoiceItem.add(InvoiceItemObj)
             }
-            InvoiceItemObj.addProperty("ProductImage",url)
-            InvoiceItemObj.addProperty("Category",model?.category)
-            InvoiceItem.add(InvoiceItemObj)
         }
         productNameListForAnalytics += ")"
         order_details.add("InvoiceItem",InvoiceItem)
