@@ -44,6 +44,8 @@ class UbboFreshApp : Application(),KodeinAware{
     var instructionString:String?=null
     var couponDiscontAmount:Double?=null
     var couponApplied:String?=null
+    var selectedScheduleDate:String?=null
+    var selectedScheduleSlot:String?=null
 
     var isComingFromReOrder:Boolean=false
     var isSearchBoxclicked:Boolean=false

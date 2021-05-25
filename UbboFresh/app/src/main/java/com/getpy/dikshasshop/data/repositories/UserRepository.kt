@@ -27,9 +27,9 @@ class UserRepository(val api:MyApi, val db:AppDataBase):SafeApiRequest(){
     }
 
     suspend fun getStoreDetailsforMultiStore
-            (access_key:String, phoneNumer:String, merchantId:Int) : MultiStoreResponse
+            (access_key:String, phoneNumer:String, merchantId:Int,lati:String?,longi:String?) : MultiStoreResponse
     {
-        return apiRequest {api.getStoreDetailsforMultiStore(access_key,phoneNumer,merchantId)}
+        return apiRequest {api.getStoreDetailsforMultiStore(access_key,phoneNumer,merchantId,lati,longi)}
     }
 
     suspend fun subCategory
@@ -127,6 +127,10 @@ class UserRepository(val api:MyApi, val db:AppDataBase):SafeApiRequest(){
     suspend fun updateStatusAfterPayment(mid:Int,pnum:String,ackey:String,orderId: String,onlinePaymentId: String,orderStatus: String): OrderResponse
     {
         return apiRequest { api.updateStatusAfterPayment(mid,pnum,ackey,orderId,onlinePaymentId,orderStatus) }
+    }
+    suspend fun getSlotDetails(mid:Int,ackey:String,number: String,date: String): SlotDetailsResponse
+    {
+        return apiRequest { api.getSlotDetails(mid,ackey,number,date) }
     }
 
     suspend fun setCustomerAddress(access_key:String, merchant_id:Int?, phone_number:String?, secondphone_number:String?,

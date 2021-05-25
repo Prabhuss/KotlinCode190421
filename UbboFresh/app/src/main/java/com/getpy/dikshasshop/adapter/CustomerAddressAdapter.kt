@@ -42,13 +42,14 @@ class CustomerAddressAdapter(var context:Context, var mCategoriesList:List<Custo
         {
             mDeveloperViewHolder.mBinding.title.text="Other Address"
         }
-        if(model.ischecked)
+        if(model.TagName.equals(Constants.pickUp))
         {
-            mDeveloperViewHolder.mBinding.radioBut.isChecked=true
-        }else
-        {
-            mDeveloperViewHolder.mBinding.radioBut.isChecked=false
+            mDeveloperViewHolder.mBinding.title.text="Pick up from store"
+            mDeveloperViewHolder.mBinding.change.visibility = View.GONE
+            mDeveloperViewHolder.mBinding.landmarkLayout.visibility = View.GONE
+            mDeveloperViewHolder.mBinding.address.visibility = View.GONE
         }
+        mDeveloperViewHolder.mBinding.radioBut.isChecked = model.ischecked
         mDeveloperViewHolder.mBinding.name.text=model.FirstName
         mDeveloperViewHolder.mBinding.address.text=model.Address1
         mDeveloperViewHolder.mBinding.landmarkText.text=model.Address2

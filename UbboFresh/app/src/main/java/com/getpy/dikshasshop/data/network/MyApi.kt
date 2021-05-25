@@ -31,11 +31,13 @@ interface MyApi {
     ) : Response<OtpValidateResponse>
 
     @FormUrlEncoded
-    @POST("v2/auth/getStoreDetailsforMultiStore")
+    @POST("v2/auth/getMultipleStorelistbyDistance")
     suspend fun getStoreDetailsforMultiStore (
             @Field("access_key")access_key:String,
             @Field("phone_number")phoneNumer:String,
-            @Field("merchant_id")merchantId:Int
+            @Field("merchant_id")merchantId:Int,
+            @Field("latitude")lati:String?,
+            @Field("longitude")longi:String?
     ) : Response<MultiStoreResponse>
 
 
@@ -210,13 +212,22 @@ interface MyApi {
     @FormUrlEncoded
     @POST("v2/auth/updateStatusAfterPayment")
     suspend fun updateStatusAfterPayment(
-            @Field("merchant_id")mid:Int,
-            @Field("phone_number")pnum:String,
-            @Field("access_key")ackey:String,
-            @Field("orderInvoiceId")orderId:String,
-            @Field("onlinePaymentId")onlinePaymentId:String,
-            @Field("orderStatus")orderStatus:String
+        @Field("merchant_id")mid:Int,
+        @Field("phone_number")pnum:String,
+        @Field("access_key")ackey:String,
+        @Field("orderInvoiceId")orderId:String,
+        @Field("onlinePaymentId")onlinePaymentId:String,
+        @Field("orderStatus")orderStatus:String
     ):Response<OrderResponse>
+
+    @FormUrlEncoded
+    @POST("v2/auth/getSlotDetails")
+    suspend fun getSlotDetails(
+        @Field("merchant_id")mid:Int,
+        @Field("access_key")ackey:String,
+        @Field("phone_number")pnum:String,
+        @Field("date")date:String
+    ):Response<SlotDetailsResponse>
 
 
 

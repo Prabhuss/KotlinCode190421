@@ -38,6 +38,10 @@ class MultiStoreAdater(val context: Context, var list:ArrayList<MultiStoreDataMo
             error(R.drawable.ic_no_image_found)
         }
         holder.mBinding.storeName.text=model.NameofStore
+        if(model.distance.toString().trim() == "-")
+            holder.mBinding.distanceLayout.visibility = View.GONE
+        else
+            holder.mBinding.distanceText.text = model.distance + " away"
         holder.mBinding.storeAddr.text=model.Address
         holder.mBinding.storePin.text=model.Pincode
     }

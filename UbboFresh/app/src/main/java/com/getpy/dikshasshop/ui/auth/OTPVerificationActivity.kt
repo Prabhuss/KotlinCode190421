@@ -201,7 +201,9 @@ class OTPVerificationActivity : AppCompatActivity(), KodeinAware {
                 val multires=viewmodel?.getStoreDetailsforMultiStore(
                         preference.getStringData(Constants.saveaccesskey),
                         preference.getStringData(Constants.saveMobileNumkey),
-                        Constants.merchantid)
+                        Constants.merchantid,
+                "0",
+                "0")
                 if(multires?.status?.toLowerCase().equals(Constants.status)) {
                     val multiStoreDataModel = multires?.data?.get(0)
                     multiStoreDataModel?.mid?.let { preference.saveIntData(Constants.saveMerchantIdKey, it) }

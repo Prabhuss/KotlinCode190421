@@ -34,9 +34,11 @@ class AuthViewModel(application: Application,private val repository: UserReposit
     suspend fun getStoreDetailsforMultiStore (
             @Field("access_key")access_key:String,
             @Field("phone_number")phoneNumer:String,
-            @Field("merchant_id")merchantId:Int
+            @Field("merchant_id")merchantId:Int,
+            @Field("latitude")lati:String,
+            @Field("longitude")longi:String
     ) : MultiStoreResponse = repository.getStoreDetailsforMultiStore(
-            access_key,phoneNumer,merchantId
+            access_key,phoneNumer,merchantId,lati,longi
     )
 
 }

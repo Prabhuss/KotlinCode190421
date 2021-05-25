@@ -13,5 +13,7 @@ class SlidingImageData {
     var Id: String? = null
     var MerchantBranchId: String? = null
     var ActiveStatus: String? = null
+    var productPicUrl: String? = null
+    var ImageLinkFlag: String? = null
 
 }

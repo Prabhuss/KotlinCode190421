@@ -250,10 +250,10 @@ class CartFragment : InjectionFragment() {
                 }
             }
         }
-        var totalCost = totalTax + totalPrice
-        var roundedTotalTax = String.format("%.2f", totalTax)
-        var roundedTotalPrice = String.format("%.2f", totalPrice)
-        var roundedTotalCost= String.format("%.2f", totalCost)
+        val totalCost = totalTax + totalPrice
+        val roundedTotalTax = String.format("%.2f", totalTax)
+        val roundedTotalPrice = String.format("%.2f", totalPrice)
+        val roundedTotalCost= String.format("%.2f", totalCost)
         binding.totMrpValue.setText(roundedTotalPrice)
         binding.gstValue.setText(roundedTotalTax)
         binding.totalPrice.setText(roundedTotalCost)

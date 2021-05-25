@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.notifications.NotificationActivity"></activity>
+        <activity android:name=".ui.cart.cartactivities.ScheduleDeliveryActivity"></activity>
+        <activity android:name=".ui.notifications.NotificationActivity" />
         <activity android:name=".ui.orderstatus.OrderStatusActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -30,7 +31,7 @@
         <activity android:name=".ui.cart.cartactivities.CheckOutActivity" />
         <activity android:name=".ui.cart.cartactivities.CouponPageActivity" />
         <activity android:name=".ui.account.WebviewActivity" />
-        <activity android:name=".ui.Products.ProductImageViewerActivity"/>
+        <activity android:name=".ui.Products.ProductImageViewerActivity" />
         <activity android:name=".ui.referandearn.ReferPageActivity" />
         <activity android:name=".ui.ordersummary.OrderSummaryActivity" />
         <activity android:name=".ui.contactmerchant.ContactMerchantActivity" />

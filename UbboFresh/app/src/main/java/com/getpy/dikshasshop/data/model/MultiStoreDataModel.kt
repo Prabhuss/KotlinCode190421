@@ -8,6 +8,7 @@ class MultiStoreDataModel {
     var NameofStore: String? = null
     var NatureofBusiness: String? = null
     var mid: Int? = null
+    var distance: String? = null
     var mpid: Int? = null
     var Pincode: String? = null
 
