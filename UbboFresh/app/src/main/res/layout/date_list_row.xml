@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/date_card"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:padding="@dimen/_20sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+
+        app:contentPadding="@dimen/_5sdp"
+        android:elevation="@dimen/_100sdp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0.0px"
+        android:clipToPadding="false"
+        android:clipChildren="false">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_alignParentLeft="true"
+                    android:textAlignment="textEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/asar"
+                    android:text="13 apr 2000, SUN"
+                    android:textColor="@color/quantum_grey800"
+                    android:textSize="@dimen/_10sdp" />
+                    <TextView
+                        android:id="@+id/date_status"
+                        android:layout_toRightOf="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:textAlignment="textStart"
+                        android:layout_centerVertical="true"
+                        android:text="today"
+                        android:textColor="@color/family_red"
+                        android:textSize="@dimen/_8sdp" />
+
+
+            </RelativeLayout>
+    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

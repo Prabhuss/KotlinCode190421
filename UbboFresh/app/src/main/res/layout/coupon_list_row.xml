@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_margin="@dimen/_5sdp"
+        android:padding="@dimen/_20sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:contentPadding="@dimen/_5sdp"
+        android:elevation="@dimen/_100sdp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0.0px"
+        android:clipToPadding="false"
+        android:clipChildren="false">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/coupon_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/alike"
+                        android:text="COUPONCODE"
+                        android:textColor="@color/quantum_grey800"
+                        android:textSize="@dimen/_18sdp" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_alignParentEnd="true"
+                        android:elevation="@dimen/_10sdp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/apply_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:textAlignment="center"
+                            android:paddingTop="@dimen/_2sdp"
+                            android:paddingBottom="@dimen/_2sdp"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:paddingRight="@dimen/_5sdp"
+                            android:text="APPLY"
+                            android:textColor="@color/family_red"
+                            android:textSize="@dimen/_14sdp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+            <TextView
+                android:id="@+id/coupon_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:text="coupon code details"
+                android:textColor="@color/quantum_grey600"
+                android:textSize="@dimen/_13sdp" /><LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min. cart value:"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/min_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rs. 1000"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:textColor="@color/quantum_brown300"
+                />
+        </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/more_details"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/more_details_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="More Details"
+                    android:textColor="@color/family_red"
+                    android:textSize="@dimen/_13sdp" />
+                <ImageView
+                    android:id="@+id/dropdown_arrow"
+                    android:layout_toRightOf="@id/more_details_txt"
+                    android:src="@drawable/ic_arrow_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/more_details_layout"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/quantum_grey400"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:id="@+id/tnc_Details"
+                    android:textColor="@color/quantum_grey800"
+                    android:textSize="@dimen/_12sdp"
+                    android:text="Coupon code terms n conditions and other details"
+                    android:fontFamily="sans-serif"/>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:id="@+id/max_discount"
+                        android:text="@string/max_discount"
+                        android:textColor="@color/quantum_grey900"
+                        android:layout_weight=".40"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/max_discount_value"
+                        android:text="NA"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight=".60"
+                        android:textColor="@color/quantum_brown300"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:id="@+id/start_date"
+                        android:text="@string/start_date"
+                        android:textColor="@color/quantum_grey900"
+                        android:layout_weight=".40"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/start_date_value"
+                        android:text="NA"
+                        android:layout_toRightOf="@+id/start_date"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:textColor="@color/quantum_brown300"
+                        android:layout_weight=".60"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:id="@+id/end_date"
+                        android:text="@string/expire_date"
+                        android:textColor="@color/quantum_grey900"
+                        android:layout_weight=".40"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/end_date_value"
+                        android:text="NA"
+                        android:layout_toRightOf="@+id/end_date"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:textColor="@color/quantum_brown300"
+                        android:layout_weight=".60"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
