@@ -14,6 +14,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import coil.load
 import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment
+import com.denzcoskun.imageslider.interfaces.ItemClickListener
+import com.denzcoskun.imageslider.models.SlideModel
 import com.getpy.dikshasshop.R
 import com.getpy.dikshasshop.UbboFreshApp
 import com.getpy.dikshasshop.Utils.*
@@ -42,65 +44,93 @@ class DemoBottomSheetFragment(val preference: PreferenceProvider,val isCmgFrmHm:
         super.onCreateView(inflater, container, savedInstanceState)
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_demo_sheet, container, false)
         val list=ArrayList<SlidingImageData>()
-        for(i in 0 until 3)
-        {
-            if(i==0)
-            {
-                val data= SlidingImageData()
-                if(model.productPicUrl!=null)
-                {
-                    if(model.imageLinkFlag!=null) {
-                        if (model.imageLinkFlag.equals("R")) {
-                            data.OfferImgURL= UbboFreshApp.instance?.imageLoadUrl+model.productPicUrl
-                        } else {
-                            data.OfferImgURL= model.productPicUrl
-                        }
-                    }else
-                    {
-                        if(model.productPicUrl==null)
-                        {
-                            data.OfferImgURL= UbboFreshApp.instance?.imageLoadUrl
-                        }else
-                        {
-                            data.OfferImgURL= UbboFreshApp.instance?.imageLoadUrl+model.productPicUrl
-                        }
+        val data= SlidingImageData()
 
+        //---------------------------------------------------------------
+        val imageList = ArrayList<SlideModel>() // Create image list
+
+        // imageList.add(SlideModel("String Url" or R.drawable, "title") You can add title
+
+
+        //---------------------------------------------------------------
+        if(model.imageList != null){
+            for(i in model.imageList){
+                try {
+
+                    if (i.ImageLinkFlag.equals("R")) {
+                        data.OfferImgURL= UbboFreshApp.instance?.imageLoadUrl+i.productPicUrl
+                        imageList.add(SlideModel(data.OfferImgURL," "))
                     }
-
-                }else
-                {
-                    data.OfferImgURL= ""
+                    else {
+                        data.OfferImgURL= i.productPicUrl
+                        imageList.add(SlideModel(data.OfferImgURL," "))
+                    }
                 }
-                list.add(data)
-            }else
-            {
-                val data= SlidingImageData()
-                list.add(data)
-            }
+                catch (e: Exception){
 
+                    print(e.message)
+                }
+            }
+            list.add(data)
+            binding.imageSlider.setImageList(imageList)
         }
-        //val viewPagerAdapter = context?.let { BottomSheetPagerAdapter(it,list) }
-        binding.viewItemImage.load(list[0].OfferImgURL){
-            placeholder(R.drawable.ic_no_image_found)
-            error(R.drawable.ic_no_image_found)
+        if(imageList.count()<1){
+            if(model.productPicUrl!=null) {
+                if (model.imageLinkFlag.equals("R")) {
+                    data.OfferImgURL= UbboFreshApp.instance?.imageLoadUrl+model.productPicUrl
+                    imageList.add(SlideModel(data.OfferImgURL," "))
+                }
+                else {
+                    data.OfferImgURL= model.productPicUrl
+                    imageList.add(SlideModel(data.OfferImgURL," "))
+                }
+            }
+            else{
+                data.OfferImgURL = ""
+                imageList.add(SlideModel(data.OfferImgURL," "))
+            }
+            list.add(data)
+            binding.imageSlider.setImageList(imageList)
         }
+        binding.imageSlider.setItemClickListener(object : ItemClickListener {
+            override fun onItemSelected(position: Int) {
+                try {
+                    val intent= Intent(context, ProductImageViewerActivity::class.java)
+                    intent.putExtra("ImgURL", imageList[position].imageUrl)
+                    startActivity(intent)
+                }
+                catch(ex: Exception){
+                    activity?.toast("Error in loading Image")
+                }
+                // You can listen here
+            }
+        })
+
+        val viewPagerAdapter = context?.let { BottomSheetPagerAdapter(it,list) }
+        //binding.viewItemImage.adapter = viewPagerAdapter
+        //binding.viewItemImage.load(list[0].OfferImgURL){
+            //placeholder(R.drawable.ic_no_image_found)
+           // error(R.drawable.ic_no_image_found)
+        //}
 
         // Color of Category type indicator
-        if(model.productType == "veg"){
-            binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_green)
-            binding.productdetailTypeLabel.text = "veg"
-        }
-        else if(model.productType == "nonveg"){
-            binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_red)
-            binding.productdetailTypeLabel.text = "non veg"
-        }
-        else if(model.productType == "cold"){
-            binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_blue)
-            binding.productdetailTypeLabel.text = "cold"
-        }
-        else if(model.productType == "spicy"){
-            binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_yellow)
-            binding.productdetailTypeLabel.text = "hot/spicy"
+        when (model.productType) {
+            "veg" -> {
+                binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_green)
+                binding.productdetailTypeLabel.text = "veg"
+            }
+            "nonveg" -> {
+                binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_red)
+                binding.productdetailTypeLabel.text = "non veg"
+            }
+            "cold" -> {
+                binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_blue)
+                binding.productdetailTypeLabel.text = "cold"
+            }
+            "spicy" -> {
+                binding.productdetailTypeColor.setImageResource(R.drawable.ic_color_yellow)
+                binding.productdetailTypeLabel.text = "hot/spicy"
+            }
         }
 
         binding.productName.text=model.productName
@@ -162,16 +192,7 @@ class DemoBottomSheetFragment(val preference: PreferenceProvider,val isCmgFrmHm:
             binding.inclueLayout.add.hideView()
             binding.inclueLayout.countText.setText("Add")
         }
-        binding.viewItemImage.setOnClickListener {
-            try {
-                val intent= Intent(context, ProductImageViewerActivity::class.java)
-                intent.putExtra("ImgURL", list[0].OfferImgURL)
-                startActivity(intent)
-            }
-            catch(ex: Exception){
-                activity?.toast("Error in loading Image")
-            }
-        }
+
         if(model.availability_Status.toLowerCase() == "no"){
             binding.inclueLayout.layout.background = ResourcesCompat.getDrawable(resources, R.drawable.rectangle_corner_disabled, null)!!
             binding.inclueLayout.layout.setOnClickListener(View.OnClickListener {

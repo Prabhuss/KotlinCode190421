@@ -9,6 +9,7 @@ plugins {
 }
 
 repositories {
+    maven { url 'https://jitpack.io' }
     maven { url 'https://maven.cashfree.com/release' }
 }
 android {
@@ -68,6 +69,7 @@ dependencies {
 
     //for image view
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
 
 
 

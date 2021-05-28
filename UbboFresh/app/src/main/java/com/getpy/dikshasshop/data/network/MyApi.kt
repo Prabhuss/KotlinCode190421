@@ -77,7 +77,7 @@ interface MyApi {
     ) : Response<GetGSTSettingDetails>
 
     @FormUrlEncoded
-    @POST("v2/prod/getProductDetails")
+    @POST("v2/prod/getProductDetails_MultiImage")
     suspend fun getProductDetails(
             @Field("merchant_id")merchant_id:Int,
             @Field("phone_number")phone_number:String,

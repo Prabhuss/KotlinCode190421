@@ -2,7 +2,13 @@ package com.getpy.dikshasshop.data.db.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import com.getpy.dikshasshop.UbboFreshApp;
+import com.getpy.dikshasshop.data.model.SlidingImageData;
+
+import java.util.List;
 
 @Entity
 public class ProductsDataModel {
@@ -389,4 +395,8 @@ public class ProductsDataModel {
         this.MerchantBranchId = MerchantBranchId;
     }
 
+    @Ignore
+    public List<SlidingImageData> imageList ;
 }
+
+

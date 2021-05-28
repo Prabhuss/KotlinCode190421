@@ -15,5 +15,7 @@ class SlidingImageData {
     var ActiveStatus: String? = null
     var productPicUrl: String? = null
     var ImageLinkFlag: String? = null
+    var CitrineProdId: String? = null
+    var productPicUrlFull: String? = null
 
 }
