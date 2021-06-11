@@ -32,7 +32,7 @@ class CompletedOrdersFragment(val completeList: ArrayList<CustomerInvoiceData>,v
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding= DataBindingUtil.inflate(LayoutInflater.from(activity),R.layout.all_orders_fragment, container, false)
         binding.recyclerview.setHasFixedSize(true)
-        binding.recyclerview.setItemAnimator(null)
+        binding.recyclerview.itemAnimator = null
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.layoutManager=layoutManager
         val adapater= completeList.let { activity?.let { it1 ->
@@ -78,7 +78,6 @@ class CompletedOrdersFragment(val completeList: ArrayList<CustomerInvoiceData>,v
             {
                 ilist.add(imodel)
             }
-
         }
         for(i in 0 until invoieList.size)
         {

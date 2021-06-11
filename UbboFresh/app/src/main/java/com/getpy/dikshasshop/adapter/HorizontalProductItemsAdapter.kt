@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -261,6 +262,8 @@ class HorizontalProductItemsAdapter(val preferences: PreferenceProvider,val mana
 
 
                 val sheet = model.let { it2 -> DemoBottomSheetFragment(preferences,true,adapterPosition,it2,mCategoriesList) }
+
+
                 sheet.show(manager, "DemoBottomSheetFragment")
             })
             mBinding.text1.setTypeface(UbboFreshApp.instance?.latoheavy)

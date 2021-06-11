@@ -407,11 +407,41 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
                     preference.getStringData(Constants.saveMobileNumkey),
                     preference.getStringData(Constants.saveaccesskey)
                 )
+                var count = 0
                 if(response.OnlinePaymentFlag?.toLowerCase()=="yes"){
-                    if(!response.apiId.toString().isNullOrEmpty()){
-                        appId = response.apiId.toString()
-                        SecretKey = response.SecretKey.toString()
-                        pay_online_checkbox.visibility= View.VISIBLE
+                    try {
+                        if(!response.apiId.toString().isNullOrEmpty()){
+                            appId = response.apiId.toString()
+                            SecretKey = response.SecretKey.toString()
+                            pay_mode_1.visibility= View.VISIBLE
+                            pay_mode_1.text = "Online Payment"
+                            count = 1
+                        }
+                    }
+                    catch (e:Exception){
+                    }
+                }
+                for(i in response.PaymentOptions!!){
+                    if(i.toString().toLowerCase() != "online payment"){
+                        count++
+                        when (count) {
+                            1 -> {
+                                pay_mode_1.text = i
+                                pay_mode_1.visibility= View.VISIBLE
+                            }
+                            2 -> {
+                                pay_mode_2.text = i
+                                pay_mode_2.visibility= View.VISIBLE
+                            }
+                            3 -> {
+                                pay_mode_3.text = i
+                                pay_mode_3.visibility= View.VISIBLE
+                            }
+                            4 -> {
+                                pay_mode_4.text = i
+                                pay_mode_4.visibility= View.VISIBLE
+                            }
+                        }
                     }
                 }
 
@@ -585,16 +615,22 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
     private fun processPaymentMode() {
         val createOrderLoadingBox = displayLoadingBox("Please wait...")
         createOrderLoadingBox.show()
-        if(binding.payOnDeliveryCheckbox.isChecked){
-            createOrderWithPOD(createOrderLoadingBox)
-        }
-        else if(binding.payOnlineCheckbox.isChecked){
+        if(binding.payMode1.isChecked){
             createOrderWithOnlinePayment(createOrderLoadingBox)
+        }
+        else if(binding.payMode2.isChecked){
+            createOrderWithOther(createOrderLoadingBox,binding.payMode2.text.toString())
+        }
+        else if(binding.payMode3.isChecked){
+            createOrderWithOther(createOrderLoadingBox, binding.payMode3.text.toString())
+        }
+        else if(binding.payMode4.isChecked){
+            createOrderWithOther(createOrderLoadingBox, binding.payMode4.text.toString())
         }
     }
 
-    private fun createOrderWithPOD(createOrderLoadingBox: AlertDialog) {
-        placeOrder(paymentMode = "COD", createOrderLoadingBox = createOrderLoadingBox)
+    private fun createOrderWithOther(createOrderLoadingBox: AlertDialog, text: String) {
+        placeOrder(paymentMode = text, createOrderLoadingBox = createOrderLoadingBox)
     }
 
     private fun createOrderWithOnlinePayment(createOrderLoadingBox: AlertDialog) {
@@ -712,7 +748,7 @@ class CheckOutActivity : AppCompatActivity(), KodeinAware {
                         map.put("Order Message", response.data?.message.toString())
                         map.put("API Message", response.data?.details.toString())
                         Analytics.trackEvent("New Order Processed", map)
-                        if(paymentMode == "COD"){
+                        if(paymentMode != "Online"){
                             val intent = Intent(this@CheckOutActivity, OrderStatusActivity::class.java)
                             intent.putExtra("message", response.data?.message)
                             intent.putExtra("caption", response.data?.caption)

@@ -2,6 +2,7 @@ package com.getpy.dikshasshop.ui.myorders
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,7 @@ class MyOrdersActivity : AppCompatActivity(),KodeinAware {
     private val preference: PreferenceProvider by instance()
     lateinit var binding:ActivityMyOrdersBinding
     lateinit var viewmodel:AllOrdersViewModel
+    var boo = false
     var getOrdResponse:GetOrderResponse?=null
     var completedList:ArrayList<CustomerInvoiceData>?=null
     var rejectedList:ArrayList<CustomerInvoiceData>?=null
@@ -63,6 +65,9 @@ class MyOrdersActivity : AppCompatActivity(),KodeinAware {
         viewmodel=ViewModelProviders.of(this,factory).get(AllOrdersViewModel::class.java)
         setSupportActionBar(binding.toolbar)
 
+        completedList = ArrayList<CustomerInvoiceData>()
+        rejectedList = ArrayList<CustomerInvoiceData>()
+        allOrdersList = ArrayList<CustomerInvoiceData>()
         AppCenter.start(
             application, "9e64f71e-a876-4d54-a2ce-3c4c1ea86334",
             Analytics::class.java, Crashes::class.java
@@ -75,21 +80,31 @@ class MyOrdersActivity : AppCompatActivity(),KodeinAware {
             getOrders()
         }
         binding.pbar.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.pbar.show()
+        binding.tabs.removeAllTabs()
+        binding.viewpager.removeAllViews()
         getOrders()
+
     }
     private fun setupViewPager(viewPager: ViewPager,response: GetOrderResponse) {
         splitArrays(response)
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        response.data.invocieLineItems?.let { allOrdersList?.let { it1 -> AllOrdersFragment.newInstance(it1, it) } }?.let { adapter.addFragment(it, "All Orders") }
+
+        allOrdersList?.let { response.data.invocieLineItems?.let { it1 -> AllOrdersFragment.newInstance(it, it1) } }?.let { adapter.addFragment(it, "All Orders") }
         completedList?.let { response.data.invocieLineItems?.let { it1 -> CompletedOrdersFragment.newInstance(it, it1) } }?.let { adapter.addFragment(it, "Complete") }
-        rejectedList?.let { response.data.invocieLineItems?.let { it1 -> RejectedOrdersFragment.newInstance(it, it1) } }?.let { adapter.addFragment(it, "Rejected") }
+        rejectedList?.let { response.data.invocieLineItems?.let { it1 -> RejectedOrdersFragment(it, it1) } }?.let { adapter.addFragment(it, "Rejected") }
         viewPager.adapter = adapter
     }
+
     private fun splitArrays(response: GetOrderResponse)
     {
-        completedList = ArrayList<CustomerInvoiceData>()
-        rejectedList = ArrayList<CustomerInvoiceData>()
-        allOrdersList = ArrayList<CustomerInvoiceData>()
+        completedList?.clear()
+        rejectedList?.clear()
+        allOrdersList?.clear()
         if (response.data != null) {
             if (response.data.customerInvoiceData != null) {
                 val custInvoiceList = response.data.customerInvoiceData
@@ -98,17 +113,17 @@ class MyOrdersActivity : AppCompatActivity(),KodeinAware {
                     if (model.OrderStatus?.toLowerCase().equals("delivered") || model.OrderStatus?.toLowerCase().equals("completed")) {
                         completedList?.add(model)
                     }
+                    //if(boo)
                     if (model.OrderStatus?.toLowerCase().equals("rejected") || model.OrderStatus?.toLowerCase().equals("cancelled") ) {
                         rejectedList?.add(model)
                     }
-                    allOrdersList?.add(model)
+                        allOrdersList?.add(model)
                 }
             }
         }
 
 
         //-------------------------------------------------------
-
         //-------------------------------------------------------
     }
     internal class ViewPagerAdapter(manager: FragmentManager?) : FragmentPagerAdapter(manager!!) {

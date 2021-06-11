@@ -263,7 +263,7 @@ fun Context.okDialogWithNavigateToStore(activity: Activity,preference:Preference
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
     val binding :OkCustomDialogBinding= DataBindingUtil.inflate(
-            LayoutInflater.from(this), R.layout.ok_custom_dialog, null, false);
+        LayoutInflater.from(this), R.layout.ok_custom_dialog, null, false);
     dialog.setContentView(binding.root)
     binding.header.text = title
     binding.message.text=message
@@ -288,6 +288,7 @@ fun Context.okDialogWithNavigateToStore(activity: Activity,preference:Preference
     if(this!=null)
         dialog.show()
 }
+
 
 
 

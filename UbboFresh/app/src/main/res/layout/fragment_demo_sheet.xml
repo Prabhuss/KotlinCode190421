@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:behavior_peekHeight="10dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -29,7 +31,7 @@
                             android:id="@+id/image_slider"
                             app:iss_title_background="@drawable/slidingbg"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_250sdp"/>
+                            android:layout_height="@dimen/_236sdp"/>
                             <!--app:iss_auto_cycle="true"
                             app:iss_delay="0"
                             app:iss_period="1000" -->
@@ -43,8 +45,73 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/viewPager"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:orientation="horizontal" />
+                            android:gravity="start"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/product_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/_8sdp"
+                                android:text="Marico Veggie Clean Pouch 200ML"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/_14sdp" /><LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/_5sdp">
+
+                            <TextView
+                                android:id="@+id/yousave"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#EE6A2E"
+                                android:padding="@dimen/_1sdp"
+                                android:paddingTop="@dimen/_10sdp"
+                                android:paddingBottom="@dimen/_10sdp"
+                                android:text="you save"
+                                android:textColor="@android:color/white" />
+
+                            <TextView
+                                android:id="@+id/discount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:paddingTop="@dimen/_10sdp"
+                                android:paddingBottom="@dimen/_10sdp"
+                                android:text="9:00" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="right"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/productdetail_type_color"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="@dimen/_27sdp" />
+
+                                    <TextView
+                                        android:id="@+id/productdetail_type_label"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_alignParentBottom="true"
+                                        android:textAlignment="center"
+                                        android:textSize="@dimen/_6sdp" />
+
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+                        </LinearLayout>
 
                         <androidx.core.widget.NestedScrollView
                             android:id="@+id/nestedScrollView"
@@ -87,71 +154,8 @@
                                                     android:layout_toLeftOf="@+id/add_but"
                                                     android:orientation="vertical">
 
-                                                    <TextView
-                                                        android:id="@+id/product_name"
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:padding="@dimen/_5sdp"
-                                                        android:text="Marico Veggie Clean Pouch 200ML"
-                                                        android:textColor="@android:color/black"
-                                                        android:textSize="@dimen/_14sdp" />
 
-                                                    <LinearLayout
-                                                        android:layout_width="match_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:orientation="horizontal"
-                                                        android:paddingLeft="@dimen/_5sdp">
 
-                                                        <TextView
-                                                            android:id="@+id/yousave"
-                                                            android:layout_width="wrap_content"
-                                                            android:layout_height="wrap_content"
-                                                            android:background="#EE6A2E"
-                                                            android:padding="@dimen/_1sdp"
-                                                            android:paddingTop="@dimen/_10sdp"
-                                                            android:paddingBottom="@dimen/_10sdp"
-                                                            android:text="you save"
-                                                            android:textColor="@android:color/white" />
-
-                                                        <TextView
-                                                            android:id="@+id/discount"
-                                                            android:layout_width="wrap_content"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginLeft="@dimen/_5sdp"
-                                                            android:paddingTop="@dimen/_10sdp"
-                                                            android:paddingBottom="@dimen/_10sdp"
-                                                            android:text="9:00" />
-
-                                                        <RelativeLayout
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="match_parent"
-                                                            android:gravity="right"
-                                                            android:orientation="vertical">
-
-                                                            <LinearLayout
-                                                                android:layout_width="wrap_content"
-                                                                android:layout_height="match_parent"
-                                                                android:layout_alignParentRight="true"
-                                                                android:layout_centerHorizontal="true"
-                                                                android:orientation="vertical">
-
-                                                                <ImageView
-                                                                    android:id="@+id/productdetail_type_color"
-                                                                    android:layout_width="match_parent"
-                                                                    android:layout_height="@dimen/_27sdp" />
-
-                                                                <TextView
-                                                                    android:id="@+id/productdetail_type_label"
-                                                                    android:layout_width="match_parent"
-                                                                    android:layout_height="wrap_content"
-                                                                    android:layout_alignParentRight="true"
-                                                                    android:layout_alignParentBottom="true"
-                                                                    android:textAlignment="center"
-                                                                    android:textSize="@dimen/_6sdp" />
-
-                                                            </LinearLayout>
-                                                        </RelativeLayout>
-                                                    </LinearLayout>
 
                                                     <LinearLayout
                                                         android:layout_width="match_parent"

@@ -349,8 +349,7 @@ interface MyApi {
             val okHttpClient=OkHttpClient.Builder()
                     .connectTimeout(30,TimeUnit.SECONDS)
                     .readTimeout(30,TimeUnit.SECONDS)
-
-                .addInterceptor(networkConnectionInterceptor).build()
+                    .addInterceptor(networkConnectionInterceptor).build()
             return Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(Constants.baseurl)

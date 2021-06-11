@@ -170,19 +170,36 @@
                         android:paddingLeft="@dimen/_10sdp">
 
                         <RadioButton
-                            android:id="@+id/pay_online_checkbox"
+                            android:id="@+id/pay_mode_1"
                             android:layout_width="match_parent"
                             android:layout_height="34dp"
-                            android:text="Online Payment"
+                            android:text="Option 1"
                             android:textSize="@dimen/_12sdp"
                             android:visibility="gone" />
 
                         <RadioButton
-                            android:id="@+id/pay_on_delivery_checkbox"
+                            android:id="@+id/pay_mode_2"
                             android:layout_width="match_parent"
                             android:layout_height="34dp"
-                            android:text="Pay on Delivery"
-                            android:textSize="@dimen/_12sdp" />
+                            android:text="Option 2"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone" />
+
+                        <RadioButton
+                            android:id="@+id/pay_mode_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:text="Option 3"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone"  />
+
+                        <RadioButton
+                            android:id="@+id/pay_mode_4"
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:text="Option 4"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone"  />
                     </RadioGroup>
 
                     <TextView

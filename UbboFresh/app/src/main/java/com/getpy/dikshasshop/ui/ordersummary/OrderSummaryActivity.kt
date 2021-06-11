@@ -1,9 +1,12 @@
 package com.getpy.dikshasshop.ui.ordersummary
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -13,19 +16,19 @@ import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.getpy.dikshasshop.R
 import com.getpy.dikshasshop.UbboFreshApp
-import com.getpy.dikshasshop.Utils.Constants
-import com.getpy.dikshasshop.Utils.NoInternetExcetion
-import com.getpy.dikshasshop.Utils.okDialogWithOneAct
-import com.getpy.dikshasshop.Utils.snakBar
+import com.getpy.dikshasshop.Utils.*
 import com.getpy.dikshasshop.adapter.OrderSummaryAdapter
 import com.getpy.dikshasshop.data.db.AppDataBase
 import com.getpy.dikshasshop.data.model.CustomerInvoiceData
 import com.getpy.dikshasshop.data.model.InvocieLineItems
 import com.getpy.dikshasshop.data.preferences.PreferenceProvider
 import com.getpy.dikshasshop.databinding.ActivityOrderSummaryBinding
+import com.getpy.dikshasshop.databinding.OkCustomDialogBinding
 import com.getpy.dikshasshop.ui.main.MainActivity
+import com.getpy.dikshasshop.ui.orderstatus.OrderStatusActivity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import org.json.JSONObject
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -70,10 +73,20 @@ class OrderSummaryActivity : AppCompatActivity(),KodeinAware{
         binding.orderSummaryGstValue.text = cmodel?.TaxAmount
         binding.totalValue.text=cmodel?.PayableAmount
 
+        if(cmodel?.TypeOfRoom.toString().toLowerCase() == "yes"){
+            binding.cancelOrder.visibility = View.VISIBLE
+        }
+        else {
+            binding.cancelOrder.visibility = View.GONE
+            binding.cancelOrder.isEnabled = false
+        }
         binding.reorder.setOnClickListener {
             callReorderService()
         }
-
+        binding.cancelOrder.setOnClickListener {
+            okDialogWithCancelOrder("Cancel Order","Are you sure you want to cancel the order?")
+        }
+        getMerchantAppSettingDetails()
         binding.image.setOnClickListener(View.OnClickListener {
             finish()
         })
@@ -95,6 +108,7 @@ class OrderSummaryActivity : AppCompatActivity(),KodeinAware{
         binding.toal.setTypeface(UbboFreshApp.instance?.latobold)
         binding.totalValue.setTypeface(UbboFreshApp.instance?.latobold)
     }
+
     fun callReorderService()
     {
         val jsonobject= JSONObject()
@@ -149,5 +163,142 @@ class OrderSummaryActivity : AppCompatActivity(),KodeinAware{
                 okDialogWithOneAct("Error",e.message.toString())
             }
         }
+    }
+
+    fun cancelOrder(CurrentOrderInvoiceId : String?,
+                    orderStatus: String){
+        lifecycleScope.launch(){
+            try{
+                val pdata =  viewmodel.updateStatusAfterPayment(
+                    preference.getIntData(Constants.saveMerchantIdKey),
+                    preference.getStringData(Constants.saveMobileNumkey),
+                    preference.getStringData(Constants.saveaccesskey),
+                    CurrentOrderInvoiceId.toString(),
+                    "",
+                    orderStatus)
+                val map=HashMap<String,String>()
+                if(pdata!= null){
+                    try {
+                        map.put("Cancel Request", "$CurrentOrderInvoiceId , $orderStatus")
+                        map.put("Status", pdata.status.toString())
+                        map.put("Message", pdata.data?.message.toString())
+                        map.put("API Message", pdata.data?.details.toString())
+                        Analytics.trackEvent("Cancel Order Request", map)
+                        if(pdata.status.equals("Success") || pdata.status.equals("Sucess")){
+                            //okDialog("Cancel Order",pdata.data?.message?:"Order successfully cancelled.")
+                            okDialog("Cancel Order","Order successfully cancelled.")
+
+                            //popup and reload the page
+                        }
+                        else  {
+                            //error msg and reload the page
+                            //okDialogWithOneAct("Cancel Order",pdata.data?.message?:"Unable to cancel the order.")
+                            okDialogWithOneAct("Cancel Order","Unable to cancel the order.")
+                        }
+                    }catch (e: NoInternetExcetion)
+                    {
+                        //binding.pbar.dismiss()
+                        networkDialog()
+                    }catch (e:CancellationException)
+                    {
+                        //binding.pbar.dismiss()
+                        Log.i("scope","job is canceled")
+                    }
+                    catch (e:Exception)
+                    {
+                        map.put("Status", "Failure due to Exception")
+                        map.put("Exception Message", e.message.toString())
+                        Analytics.trackEvent("Cancel Order Request", map)
+                        //binding.pbar.dismiss()
+                        okDialogWithOneAct("Error CO01",e.message.toString())
+                    }
+                }
+                else{
+                    map.put("Status", "NULL as response")
+                    Analytics.trackEvent("Cancel Order Request", map)
+                    //error
+                    startActivity(intent)
+                }
+            }
+            catch (e:Exception)
+            {
+                okDialogWithOneAct("Error CO02",e.message.toString())
+            }
+        }
+    }
+
+    fun getMerchantAppSettingDetails() {
+
+        val jsonobject=JSONObject()
+        jsonobject.put("access_key",preference.getStringData(Constants.saveaccesskey))
+        jsonobject.put("phone_number",preference.getStringData(Constants.saveMobileNumkey))
+        jsonobject.put("merchant_id", preference.getIntData(Constants.saveMerchantIdKey))
+        Log.i("getMerAppSetDetails",jsonobject.toString())
+
+
+        lifecycleScope.launch {
+            try {
+                val mdata = viewmodel.merchantAppSettingDetails(
+                    preference.getIntData(Constants.saveMerchantIdKey),
+                    "TypeOfRoom",
+                    preference.getStringData(Constants.saveMobileNumkey),
+                    preference.getStringData(Constants.saveaccesskey))
+                val temp = 0
+            } catch (e: NoInternetExcetion) {
+                networkDialog()
+            }catch (e:CancellationException)
+            {
+                Log.i("scope","job is cancelled")
+            }
+            catch (e: Exception) {
+                okDialogWithOneAct("Error MI01.1", e.message.toString())
+            }
+        }
+    }
+    fun okDialogWithCancelOrder(title:String,message:String)
+    {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        val binding : OkCustomDialogBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(this), R.layout.ok_custom_dialog, null, false);
+        dialog.setContentView(binding.root)
+        binding.header.text = title
+        binding.message.text=message
+        binding.okText.text="Yes"
+        binding.okText.setTypeface(UbboFreshApp.instance?.latoregular)
+        binding.header.setTypeface(UbboFreshApp.instance?.latoregular)
+        binding.message.setTypeface(UbboFreshApp.instance?.latoregular)
+        binding.okText.setOnClickListener {
+            dialog.dismiss()
+            cancelOrder(cmodel?.CustomerInvoiceId,"Cancelled")
+        }
+        binding.cancelText.setOnClickListener(View.OnClickListener {
+            dialog.dismiss()
+        })
+        if(this!=null)
+            dialog.show()
+    }
+    fun okDialog(title:String,message:String)
+    {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        val binding :OkCustomDialogBinding= DataBindingUtil.inflate(
+            LayoutInflater.from(this), R.layout.ok_custom_dialog, null, false);
+        dialog.setContentView(binding.root)
+        binding.cancelText.hideView()
+        binding.header.text = title
+        binding.message.text=message
+        binding.okText.text="Ok"
+        binding.okText.setTypeface(UbboFreshApp.instance?.latoregular)
+        binding.header.setTypeface(UbboFreshApp.instance?.latoregular)
+        binding.message.setTypeface(UbboFreshApp.instance?.latoregular)
+        binding.okText.setOnClickListener {
+            dialog.dismiss()
+            finish()
+        }
+        if(this!=null)
+            dialog.show()
     }
 }

@@ -2,16 +2,18 @@ package com.getpy.dikshasshop.ui.myorders.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.microsoft.appcenter.analytics.Analytics
 import com.getpy.dikshasshop.R
-import com.getpy.dikshasshop.Utils.Constants
+import com.getpy.dikshasshop.Utils.*
 import com.getpy.dikshasshop.adapter.MyOrdersAdapter
 import com.getpy.dikshasshop.data.model.CustomerInvoiceData
 import com.getpy.dikshasshop.data.model.InvocieLineItems
@@ -20,29 +22,37 @@ import com.getpy.dikshasshop.databinding.AllOrdersFragmentBinding
 import com.getpy.dikshasshop.listeners.ItemClickListener
 import com.getpy.dikshasshop.ui.home.InjectionFragment
 import com.getpy.dikshasshop.ui.myorders.AllOrdersViewModel
+import com.getpy.dikshasshop.ui.myorders.MyOrdersActivity
 import com.getpy.dikshasshop.ui.myorders.MyOrdersModelFactory
 import com.getpy.dikshasshop.ui.ordersummary.OrderSummaryActivity
+import kotlinx.coroutines.launch
 import org.kodein.di.generic.instance
 import java.util.HashMap
 
 
-class AllOrdersFragment(val allOrdersList:ArrayList<CustomerInvoiceData>,val invoieList: ArrayList<InvocieLineItems>) : InjectionFragment(),SwipeRefreshLayout.OnRefreshListener {
+class AllOrdersFragment(var myAllOrdersList:ArrayList<CustomerInvoiceData>,var invoieList: ArrayList<InvocieLineItems>) : InjectionFragment() {
     private val factory: MyOrdersModelFactory by instance()
     private val preference: PreferenceProvider by instance()
     private lateinit var viewModel: AllOrdersViewModel
-    private lateinit var binding:AllOrdersFragmentBinding
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    private lateinit var binding: AllOrdersFragmentBinding
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View?
     {
         binding=DataBindingUtil.inflate(LayoutInflater.from(activity),R.layout.all_orders_fragment, container, false)
-        viewModel = ViewModelProvider(this,factory).get(AllOrdersViewModel::class.java)
+        binding.recyclerview.setHasFixedSize(true)
+        binding.recyclerview.setItemAnimator(null)
+        //viewModel = ViewModelProvider(this,factory).get(AllOrdersViewModel::class.java)
         // binding.swipeRefresh.setOnRefreshListener(this)
         // binding.swipeRefresh.isEnabled=false
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.layoutManager=layoutManager
-        val adapater= allOrdersList.let { activity?.let { it1 ->
+        // load order list from server
+
+        val adapater= myAllOrdersList.let { activity?.let { it1 ->
             MyOrdersAdapter(it1,it,object :ItemClickListener{
                 override fun onItemClick(view: View?, position: Int) {
-                    val model=allOrdersList.get(position)
+                    val model=myAllOrdersList.get(position)
 
                     val map= HashMap<String,String>()
                     map.put("mobileNum",preference.getStringData(Constants.saveMobileNumkey))
@@ -56,7 +66,7 @@ class AllOrdersFragment(val allOrdersList:ArrayList<CustomerInvoiceData>,val inv
                 }
 
             }) } }
-        binding.recyclerview.setAdapter(adapater)
+        binding.recyclerview.adapter = adapater
         /*binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.setItemAnimator(null)
         val mananger=activity?.supportFragmentManager
@@ -131,20 +141,18 @@ class AllOrdersFragment(val allOrdersList:ArrayList<CustomerInvoiceData>,val inv
 
         }
     }
-    companion
-    object {
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this,factory).get(AllOrdersViewModel::class.java)
+        // TODO: Use the ViewModel
+    }
+    companion object  {
         var runnable:Runnable?=null
         fun newInstance(allOrderList: ArrayList<CustomerInvoiceData>,invoieList: ArrayList<InvocieLineItems>) =
                 AllOrdersFragment(allOrderList,invoieList)
     }
 
 
-    override fun onRefresh() {
-        /*itemCount = 0
-        currentPage = PAGE_START
-        isLastPage = false
-        adapter?.clear()*/
-        //binding.swipeRefresh.isRefreshing=false
-        //doApiCall()
-    }
 }

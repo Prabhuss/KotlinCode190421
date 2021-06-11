@@ -13,7 +13,7 @@ class NetworkConnectionInterceptor(val context: Context):Interceptor {
     private val applicationContext=context.applicationContext
     override fun intercept(chain: Interceptor.Chain): Response {
         if(!isInternetAvailable())
-            throw NoInternetExcetion("maky sure you have an active data connection")
+            throw NoInternetExcetion("Make sure you have an active data connection")
         return chain.proceed(chain.request())
     }
     private fun isInternetAvailable():Boolean

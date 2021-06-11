@@ -43,6 +43,7 @@ class DemoBottomSheetFragment(val preference: PreferenceProvider,val isCmgFrmHm:
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_demo_sheet, container, false)
+
         val list=ArrayList<SlidingImageData>()
         val data= SlidingImageData()
 

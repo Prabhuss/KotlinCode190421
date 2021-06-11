@@ -24,6 +24,7 @@ import com.getpy.dikshasshop.ui.ordersummary.OrderSummaryActivity
 import org.kodein.di.generic.instance
 import java.util.HashMap
 
+
 class RejectedOrdersFragment(val rejectedList: ArrayList<CustomerInvoiceData>,val invoieList:ArrayList<InvocieLineItems>) : InjectionFragment() {
     private val factory: MyOrdersModelFactory by instance()
     private val preference: PreferenceProvider by instance()

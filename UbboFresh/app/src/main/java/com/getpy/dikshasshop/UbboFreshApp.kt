@@ -34,7 +34,6 @@ import org.kodein.di.generic.singleton
 class UbboFreshApp : Application(),KodeinAware{
     companion object{
         var instance:UbboFreshApp?=null
-
     }
     override fun onCreate() {
         super.onCreate()

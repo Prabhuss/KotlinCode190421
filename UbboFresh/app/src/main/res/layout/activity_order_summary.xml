@@ -50,10 +50,11 @@
                 android:id="@+id/reorder"
                 android:text="Reorder"
                 android:textAllCaps="false"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_margin="@dimen/_6sdp"
+                android:textSize="@dimen/_12sdp"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/white"
-                android:background="@color/family_red"
+                android:textColor="@color/family_red"
+                android:background="@drawable/button_boundary"
                 android:layout_width="@dimen/_100sdp"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
@@ -238,11 +239,23 @@
                 android:background="@color/family_grey"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel_order"
+                android:text="Cancel Order"
+                android:layout_below="@+id/line4"
+                android:textAllCaps="false"
+                android:layout_margin="@dimen/_8sdp"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13sdp"
+                android:background="@drawable/button_background_fill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_below="@+id/line4"
+                android:layout_below="@+id/cancel_order"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
